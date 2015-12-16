@@ -1,0 +1,201 @@
+# MetaRC
+# Toolbox .bashrc
+alias psg='ps aux | grep "$1"'
+alias bck='cp $1 $1.$(date +"%m%d%y").bak && cp /dev/null $1 && gzip $1.$(date +"%m%d%y").bak'
+alias lsl='ls -larth --color=auto'
+alias pscpu='ps auxf | sort -nr -k 3'
+alias pscpu10='ps auxf | sort -nr -k 3 | head -10'
+alias l='ls -larth'
+
+SVN_EDITOR=vim
+PS1="\t \H \j \$ \n [$(pwd)]  $ "
+
+######################################## ->  
+#                                            ->          ->
+#                                     -->     ->
+#        collection             ->   ->    ->
+#                                   ->                ->
+#                                      --->  -> 
+########################################          ->
+
+extract() {
+    if [ -f $1 ] ; then
+        case $1 in
+            *.tar.bz2)   tar xvjf $1     ;;
+            *.tar.gz)    tar xvzf $1     ;;
+            *.bz2)       bunzip2 $1      ;;
+            *.rar)       unrar x $1      ;;
+            *.gz)        gunzip $1       ;;
+            *.tar)       tar xvf $1      ;;
+            *.tbz2)      tar xvjf $1     ;;
+            *.tgz)       tar xvzf $1     ;;
+            *.zip)       unzip $1        ;;
+            *.Z)         uncompress $1   ;;
+            *.7z)        7z x $1         ;;
+            *)           echo "'$1' cannot be extracted via >extract<" ;;
+        esac
+    else
+        echo "'$1' is not a valid file!"
+    fi
+}
+repeat() {
+    local i max
+    max=$1; shift;
+    for ((i=1; i <= max ; i++)); do  # --> C-like syntax
+        eval "$@";
+    done
+}
+
+stripspace () {
+tr -d '\040\011\012\015'
+}
+
+bigreport () {
+  touch ~/df.$(hostname).$(date +'%m%d%y:%H:%M%S').out
+  touch ~/lsof.$(hostname).$(date +'%m%d%y:%H:%M%S').out
+  touch  ~/netstat.$(hostname).$(date +'%m%d%y:%H:%M%S').out
+  touch ~/netstat.$(hostname).$(date +'%m%d%y:%H:%M%S').out
+  touch  ~/facter.$(hostname).$(date +'%m%d%y:%H:%M%S').out
+  touch  ~/users.$(hostname).$(date +'%m%d%y:%H:%M%S').out
+  touch  ~/last.$(hostname).$(date +'%m%d%y:%H:%M%S').out
+
+  df -h > ~/df.$(hostname).$(date +'%m%d%y:%H:%M%S').out
+  lsof > ~/lsof.$(hostname).$(date +'%m%d%y:%H:%M%S').out
+  netstat -tan > ~/netstat.$(hostname).$(date +'%m%d%y:%H:%M%S').out
+  free -m > ~/netstat.$(hostname).$(date +'%m%d%y:%H:%M%S').out
+  facter > ~/facter.$(hostname).$(date +'%m%d%y:%H:%M%S').out
+  users > ~/users.$(hostname).$(date +'%m%d%y:%H:%M%S').out
+  last > ~/last.$(hostname).$(date +'%m%d%y:%H:%M%S').out
+}
+
+harvest () {
+  for x in $@ ; do tar czvf harvest.$(date +'%m%d%y').$(hostname).$(echo "$@" | tr -d '\040\011\012\015').tgz "$x"; done
+}
+
+#######################################################---------------------> Enjoy.
+
+# Avoid duplicates
+export HISTCONTROL=ignoredups:erasedups
+# When the shell exits, append to the history file instead of overwriting it
+shopt -s histappend
+
+# After each command, append to the history file and reread it
+export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; history -r"
+
+#CryptoCore
+# These functions are used for bitwise XOR operations
+# for ad-hoc academic cryptographic batches.
+
+# Convert common decimals to binary.
+# The int2bin function can only handle 20 character inputs at a time.
+int2bin () {
+    num="$1"
+    bin=""
+    padding=""
+    base2=(0 1)
+    while [ "$num" -gt 0 ]; do
+        bin=${base2[$(($num % 2))]}$bin
+        num=$(($num / 2))
+    done
+    if [ $((8 - (${#bin} % 8))) -ne 8 ]; then
+        printf -v padding '%*s' $((8 - (${#bin} % 8))) ''
+        padding=${padding// /0}
+    fi
+    echo $padding$bin
+}
+
+# Call tr program to remove whitespace of all kinds
+# to prepare for bitwise XOR.
+stripper () {
+tr -d '\040\011\012\015'
+}
+
+# Convert binary to decimal. This thing needs work.
+bin2dec () {
+    echo $((2#$1))
+}
+
+# Return the seed length.
+msglgth () {
+SETMSGLGTH=$(cat ~/seeds/a.xor | wc -c)
+}
+
+# Bitwise XOR.
+exor () {
+bash ~/Scripts/xor.sh
+}
+# Repeat n times command.
+repeat () {
+    local i max
+    max=$1; shift;
+    for ((i=1; i <= max ; i++)); do  # --> C-like syntax
+        eval "$@";
+    done
+}
+# One-time-pad batch XOR.
+otpbatch () {
+for datasets in $(ls ~/seeds/*); do 
+    cat $datasets | stripper > ~/seeds/b.xor; 
+    exor > "$datasets".output; 
+done 2> /dev/null &
+}
+
+# Same as otpbatch but with verbose output
+reqbatch () {
+for datasets in $(ls ~/seeds/*); do
+echo "setting $datasets to b.xor";
+cat $datasets | stripper > ~/seeds/b.xor;
+echo "now b.xor is $(cat ~/seeds/b.xor)";
+echo "XOR $datasets against a.xor - $(cat ~/seeds/a.xor)"
+exor > "$datasets".output;
+done 2> /dev/null 
+}
+
+# Run a validation check on the seed files.
+libvalidate () {
+for data in $(ls ~/seeds/*); do
+    echo "$data"; 
+    cat "$data" | wc -c; 
+    echo "$data stripped"; 
+    cat "$data" | stripper | wc -c; 
+done
+}
+
+# Generate a medium sized library of binary digits for playing with.
+function libgen () { 
+    for x in {1000..9999}; 
+        do int2bin "$x" > "$x".xor ; 
+    done
+}
+
+######### Python extra tools section below.
+
+function byteconv () {
+python -c "import pprint;pprint.pprint(zip(('Byte', 'KByte', 'MByte', 'GByte', 'TByte'), (1 << 10*i for i in xrange(5))))"
+}
+
+function csv2json () {
+python -c "import csv,json;print json.dumps(list(csv.reader(open('csv_file.csv'))))"
+}
+
+function dhex () {
+export HEXIN=$1 ; python -c "print ''.join(chr(int(''.join(i), 16)) for i in zip(*[iter('$HEXIN')]*2))"; 
+}
+
+# Now the python -m group, thanks PEP 338.
+
+function tokenize () {
+python -m "import sys; print sys.stdin.read().replace('\r','').split('\n\n',2)[1]";
+}
+
+function calendar () {
+python -m "import sys; print sys.stdin.read().replace('\r','').split('\n\n',2)[1]";
+}
+
+function cgi-it () {
+python -m "import sys; print sys.stdin.read().replace('\r','').split('\n\n',2)[1]";
+}
+
+function termweb () {
+python -m 'webbrowser'
+}
