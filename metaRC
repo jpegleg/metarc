@@ -6,6 +6,11 @@ alias lsl='ls -larth --color=auto'
 alias pscpu='ps auxf | sort -nr -k 3'
 alias pscpu10='ps auxf | sort -nr -k 3 | head -10'
 alias l='ls -larth'
+alias killer='ps aux | grep $1 | grep -v grep | grep -v vi | awk '{print $2}' | xargs kill -9'
+alias lsofof='lsof | grep $1'
+alias netdns='ss -atxr'
+alias netip='ss -tawp'
+alias netipall='ss -tawpx'
 
 SVN_EDITOR=vim
 PS1="\t \H \j \$ \n [$(pwd)]  $ "
