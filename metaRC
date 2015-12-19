@@ -1,4 +1,19 @@
 # MetaRC
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
+
+PS1="\t \H \j \n [$(pwd)]  $ "
+
+BASH_ENV=$HOME/.bashrc
+
 # Toolbox .bashrc
 alias psg='ps aux | grep "$1"'
 alias bck='cp $1 $1.$(date +"%m%d%y").bak && cp /dev/null $1 && gzip $1.$(date +"%m%d%y").bak'
@@ -11,6 +26,20 @@ alias lsofof='lsof | grep $1'
 alias netdns='ss -atxr'
 alias netip='ss -tawp'
 alias netipall='ss -tawpx'
+alias errors='grep -i error * | less'
+alias broot='sudo su -'
+alias boxstats='uptime && users && date'
+alias errorhunt='grep -i error * | less'
+alias dusage='df -h && date'
+alias squeeze='sudo gzip *log; echo -; sudo gzip */*log; echo --; sudo gzip */*/*log; echo ---; sudo gzip */*/*/*log; echo ----; sudo gzip */*/*/*/*log; echo -----; sudo gzip */*/*/*/*log; echo ------;'
+alias loghunt='ls -larth *log; echo -; ls -larth */*log; echo --; ls -larth  */*/*log; echo ---;ls -larth */*/*/*log; echo ----; ls -larth */*/*/*/*log; echo -----; ls -larth */*/*/*/*log; echo ------;'
+alias scripter='cd /usr/local/scripts'
+alias cfger='cd /usr/local/cfgs'
+alias bck='cp $1 $1.$(date +"%m%d%y").bak && cp /dev/null $1 && gzio $1.$(date +"%m%d%y").bak'
+alias lsl='ls -larth --color=auto'
+alias pscpu='ps auxf | sort -nr -k 3'
+alias pscpu10='ps auxf | sort -nr -k 3 | head -10'
+alias brutezip='sudo gzip $1/*log'
 
 SVN_EDITOR=vim
 PS1="\t \H \j \$ \n [$(pwd)]  $ "
