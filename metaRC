@@ -40,7 +40,7 @@ alias lsl='ls -larth --color=auto'
 alias pscpu='ps auxf | sort -nr -k 3'
 alias pscpu10='ps auxf | sort -nr -k 3 | head -10'
 alias brutezip='sudo gzip $1/*log'
-alias bkoff='bigreport && cp ~/*out /var/log ; tar czvf backup.tgz /var/log && scp backup.tgz $(cat /tmp/user)@$(cat /tmp/backup):/tmp/ && shutdown -r now'
+alias bkoff='bigreport && cp ~/*out /var/log ; tar czvf backup-$(hostname)-$(date +'%m%d%y%H%M%S'.tgz /var/log && scp backup*.tgz $(cat /tmp/user)@$(cat /tmp/backup):/tmp/ && shutdown -r now'
 
 
 SVN_EDITOR=vim
