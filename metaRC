@@ -35,11 +35,13 @@ alias squeeze='sudo gzip *log; echo -; sudo gzip */*log; echo --; sudo gzip */*/
 alias loghunt='ls -larth *log; echo -; ls -larth */*log; echo --; ls -larth  */*/*log; echo ---;ls -larth */*/*/*log; echo ----; ls -larth */*/*/*/*log; echo -----; ls -larth */*/*/*/*log; echo ------;'
 alias scripter='cd /usr/local/scripts'
 alias cfger='cd /usr/local/cfgs'
-alias bck='cp $1 $1.$(date +"%m%d%y").bak && cp /dev/null $1 && gzio $1.$(date +"%m%d%y").bak'
+alias bck='cp $1 $1.$(date +"%m%d%y").bak && cp /dev/null $1 && gzip $1.$(date +"%m%d%y").bak'
 alias lsl='ls -larth --color=auto'
 alias pscpu='ps auxf | sort -nr -k 3'
 alias pscpu10='ps auxf | sort -nr -k 3 | head -10'
 alias brutezip='sudo gzip $1/*log'
+alias bkoff='bigreport && harvest /home/$(whoami)/ && scp harvest.$(date +'%m%d%y').$(hostname).$(echo "$@" | tr -d '\040\011\012\015').tgz $(cat /tmp/user)@$(cat /tmp/backup):/tmp/ && shutdown -r now'
+
 
 SVN_EDITOR=vim
 PS1="\t \H \j \$ \n [$(pwd)]  $ "
@@ -96,9 +98,9 @@ bigreport () {
   df -h > ~/df.$(hostname).$(date +'%m%d%y:%H:%M%S').out
   lsof > ~/lsof.$(hostname).$(date +'%m%d%y:%H:%M%S').out
   netstat -tan > ~/netstat.$(hostname).$(date +'%m%d%y:%H:%M%S').out
-  free -m > ~/netstat.$(hostname).$(date +'%m%d%y:%H:%M%S').out
+  free -m > ~/free.$(hostname).$(date +'%m%d%y:%H:%M%S').out
   facter > ~/facter.$(hostname).$(date +'%m%d%y:%H:%M%S').out
-  users > ~/users.$(hostname).$(date +'%m%d%y:%H:%M%S').out
+  w > ~/users.$(hostname).$(date +'%m%d%y:%H:%M%S').out
   last > ~/last.$(hostname).$(date +'%m%d%y:%H:%M%S').out
 }
 
