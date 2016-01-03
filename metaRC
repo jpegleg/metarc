@@ -43,7 +43,8 @@ alias bkoff='bigreport && cp ~/*out /var/log ; tar czvf backup-$(hostname)-$(dat
 
 
 SVN_EDITOR=vim
-PS1="\t \H \j \$ \n [$(pwd)]  $ "
+PS1="\t \H:/\$(pwd) \j $ "
+
 
 ######################################## ->  
 #                                            ->          ->
