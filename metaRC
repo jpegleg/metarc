@@ -10,7 +10,7 @@ if ! shopt -oq posix; then
   fi
 fi
 
-PS1="\t \H \j \n [$(pwd)]  $ "
+export PS1='\t \[\e[0;3$(($RANDOM%7+1))m\]\H:/$(pwd) \j > \[\e[00m\]'
 
 BASH_ENV=$HOME/.bashrc
 
@@ -43,7 +43,6 @@ alias bkoff='bigreport && cp ~/*out /var/log ; tar czvf backup-$(hostname)-$(dat
 
 
 SVN_EDITOR=vim
-PS1="\t \H:/\$(pwd) \j $ "
 
 
 ######################################## ->  
