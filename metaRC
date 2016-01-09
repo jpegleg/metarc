@@ -160,7 +160,7 @@ int2bin () {
 
 # Call tr program to remove whitespace of all kinds
 # to prepare for bitwise XOR.
-stripper () {
+stripspace () {
 tr -d '\040\011\012\015'
 }
 
