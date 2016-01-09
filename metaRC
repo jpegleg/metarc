@@ -81,10 +81,12 @@ repeat() {
     done
 }
 
-stripspace () {
+stripsp () {
 tr -d '\040\011\012\015'
 }
-
+stripbl () {
+tr -d '[blank]'
+}
 rmblank () {
 sed '/^\s*$/d'
 }
