@@ -162,9 +162,6 @@ int2bin () {
 
 # Call tr program to remove whitespace of all kinds
 # to prepare for bitwise XOR.
-stripspace () {
-tr -d '\040\011\012\015'
-}
 
 # Convert binary to decimal. This thing needs work.
 bin2dec () {
