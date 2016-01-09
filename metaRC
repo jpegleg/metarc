@@ -85,6 +85,25 @@ stripspace () {
 tr -d '\040\011\012\015'
 }
 
+rmblank () {
+sed '/^\s*$/d'
+}
+rmblankw () {
+sed -i '/^\s*$/d'
+}
+scrubnumberswithlove () {
+sed 's/[0//♥/g'
+}
+scrubletterswithlove () {
+sed 's/[a-Z]/♥/g'
+}
+scrubnumbers () {
+sed 's/[0-9]/∎/g'
+}
+scrubletters () {
+sed 's/[a-Z]/∎/g'
+}
+
 bigreport () {
   touch ~/df.$(hostname).$(date +'%m%d%y:%H:%M%S').out
   touch ~/lsof.$(hostname).$(date +'%m%d%y:%H:%M%S').out
