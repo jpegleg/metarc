@@ -53,6 +53,10 @@ SVN_EDITOR=vim
 #                                      --->  -> 
 ########################################          ->
 
+function ext-ip () { 
+    lynx --dump $1; 
+}
+
 extract() {
     if [ -f $1 ] ; then
         case $1 in
