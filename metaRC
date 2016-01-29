@@ -97,8 +97,12 @@ sed '/^\s*$/d'
 rmblankw () {
 sed -i '/^\s*$/d'
 }
+
+scrub () {
+sed 's/[:graph:]/∎//g'
+}
 scrubnumberswithlove () {
-sed 's/[0//♥/g'
+sed 's/[0-9]//♥/g'
 }
 scrubletterswithlove () {
 sed 's/[a-Z]/♥/g'
