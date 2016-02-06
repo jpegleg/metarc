@@ -93,6 +93,17 @@ function statl {
 stat -c '%a %n' 
 }
 
+remindperms () {
+echo "0    (No read, no write, no execute)     ---"
+echo "1    (No read, no write, execute)    --x"
+echo "2    (No read, write, no execute)    -w-"
+echo "3    (No read, write, execute)    -wx"
+echo "4    (Read, no write, no execute)    r--"
+echo "5    (Read, no write, execute)    r-x"
+echo "6    (Read, write, no execute)    rw-"
+echo "7    (Read, write, execute)   rwx"
+}
+
 stripsp () {
 tr -d '\040\011\012\015'
 }
