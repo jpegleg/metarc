@@ -102,6 +102,18 @@ echo "4    (Read, no write, no execute)    r--"
 echo "5    (Read, no write, execute)    r-x"
 echo "6    (Read, write, no execute)    rw-"
 echo "7    (Read, write, execute)   rwx"
+echo "(who)    u        User"
+echo "(who)    g	    Group owner"
+echo "(who)    o	    Other"
+echo "(who)    a	    All (“world”)"
+echo "(action)     +        Adding permissions"
+echo "(action)     -	    Removing permissions"
+echo "(action)     =	    Explicitly set permissions"
+echo "(permissions)    r	    Read"
+echo "(permissions)    w	    Write"
+echo "(permissions)    x	    Execute"
+echo "(permissions)    t	    Sticky bit"
+echo "(permissions)    s	    Set UID or GID"
 }
 
 stripsp () {
