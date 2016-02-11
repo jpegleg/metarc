@@ -13,6 +13,7 @@ fi
 export PS1='\t \[\e[0;3$(($RANDOM%7+1))m\]\H:/$(pwd) \j > \[\e[00m\]'
 
 BASH_ENV=$HOME/.bashrc
+HISTTIMEFORMAT=$(date +%m%d%Y-%H%M%S--)
 
 # Toolbox .bashrc
 alias psg='ps aux | grep "$1"'
