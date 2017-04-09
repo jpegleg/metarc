@@ -41,7 +41,8 @@ alias pscpu='ps auxf | sort -nr -k 3'
 alias pscpu10='ps auxf | sort -nr -k 3 | head -10'
 alias brutezip='sudo gzip $1/*log'
 alias bkoff='bigreport && cp ~/*out /var/log ; tar czvf backup-$(hostname)-$(date +'%m%d%y%H%M%S'.tgz /var/log && scp backup*.tgz $(cat /tmp/user)@$(cat /tmp/backup):/tmp/ && shutdown -r now'
-
+alias ff='firefox 2>> firefox.$(date +%m%d%y-%H_%S).log'
+alias chromeium='chromium 2>> chromium.$(date +%m%d%y-%H_%S).log'
 
 SVN_EDITOR=vim
 
@@ -274,19 +275,4 @@ python -c "import csv,json;print json.dumps(list(csv.reader(open('csv_file.csv')
 }
 dhex() {
 export HEXIN=$1 ; python -c "print ''.join(chr(int(''.join(i), 16)) for i in zip(*[iter('$HEXIN')]*2))"; 
-}
-
-# Now the python -m group, thanks PEP 338.
-
-tokenize() {
-python -m "import sys; print sys.stdin.read().replace('\r','').split('\n\n',2)[1]";
-}
-calendar() {
-python -m "import sys; print sys.stdin.read().replace('\r','').split('\n\n',2)[1]";
-}
-cgi-it() {
-python -m "import sys; print sys.stdin.read().replace('\r','').split('\n\n',2)[1]";
-}
-termweb() {
-python -m 'webbrowser'
 }
