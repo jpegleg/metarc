@@ -54,7 +54,7 @@ SVN_EDITOR=vim
 #                                      --->  -> 
 ########################################          ->
 
-function ext-ip () { 
+ext-ip() { 
     lynx --dump $1; 
 }
 
@@ -78,6 +78,7 @@ extract() {
         echo "'$1' is not a valid file!"
     fi
 }
+
 repeat() {
     local i max
     max=$1; shift;
@@ -86,15 +87,15 @@ repeat() {
     done
 }
 
-function lsnp { 
+lsnp() { 
 ls -l $1 | awk '{k=0;for(i=0;i<=8;i++)k+=((substr($1,i+2,1)~/[rwx]/) *2^(8-i));if(k)printf("%0o ",k);print}'; 
 }
 
-function statl {
+statl() {
 stat -c '%a %n' 
 }
 
-remindperms () {
+remindperms() {
 echo "0    (No read, no write, no execute)     ---"
 echo "1    (No read, no write, execute)    --x"
 echo "2    (No read, write, no execute)    -w-"
@@ -117,36 +118,36 @@ echo "(permissions)    t	    Sticky bit"
 echo "(permissions)    s	    Set UID or GID"
 }
 
-stripsp () {
+stripsp() {
 tr -d '\040\011\012\015'
 }
-stripbl () {
+stripbl() {
 tr -d '[blank]'
 }
-rmblank () {
+rmblank() {
 sed '/^\s*$/d'
 }
-rmblankw () {
+rmblankw() {
 sed -i '/^\s*$/d'
 }
 
-scrub () {
+scrub() {
 sed 's/[:graph:]/∎//g'
 }
-scrubnumberswithlove () {
+scrubnumberswithlove() {
 sed 's/[0-9]//♥/g'
 }
-scrubletterswithlove () {
+scrubletterswithlove() {
 sed 's/[a-Z]/♥/g'
 }
-scrubnumbers () {
+scrubnumbers() {
 sed 's/[0-9]/∎/g'
 }
-scrubletters () {
+scrubletters() {
 sed 's/[a-Z]/∎/g'
 }
 
-bigreport () {
+bigreport() {
   touch ~/df.$(hostname).$(date +'%m%d%y:%H:%M%S').out
   touch ~/lsof.$(hostname).$(date +'%m%d%y:%H:%M%S').out
   touch  ~/netstat.$(hostname).$(date +'%m%d%y:%H:%M%S').out
@@ -164,7 +165,7 @@ bigreport () {
   last > ~/last.$(hostname).$(date +'%m%d%y:%H:%M%S').out
 }
 
-harvest () {
+harvest() {
   for x in $@ ; do tar czvf harvest.$(date +'%m%d%y').$(hostname).$(echo "$@" | tr -d '\040\011\012\015').tgz "$x"; done
 }
 
@@ -174,6 +175,8 @@ harvest () {
 export HISTCONTROL=ignoredups:erasedups
 # When the shell exits, append to the history file instead of overwriting it
 shopt -s histappend
+shopt -s extglob
+shopt -s nullglob
 
 # After each command, append to the history file and reread it
 export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; history -r"
@@ -184,7 +187,7 @@ export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; histor
 
 # Convert common decimals to binary.
 # The int2bin function can only handle 20 character inputs at a time.
-int2bin () {
+int2bin() {
     num="$1"
     bin=""
     padding=""
@@ -204,21 +207,21 @@ int2bin () {
 # to prepare for bitwise XOR.
 
 # Convert binary to decimal. This thing needs work.
-bin2dec () {
+bin2dec() {
     echo $((2#$1))
 }
 
 # Return the seed length.
-msglgth () {
+msglgth() {
 SETMSGLGTH=$(cat ~/seeds/a.xor | wc -c)
 }
 
 # Bitwise XOR.
-exor () {
+exor() {
 bash ~/Scripts/xor.sh
 }
 # Repeat n times command.
-repeat () {
+repeat() {
     local i max
     max=$1; shift;
     for ((i=1; i <= max ; i++)); do  # --> C-like syntax
@@ -226,7 +229,7 @@ repeat () {
     done
 }
 # One-time-pad batch XOR.
-otpbatch () {
+otpbatch() {
 for datasets in $(ls ~/seeds/*); do 
     cat $datasets | stripper > ~/seeds/b.xor; 
     exor > "$datasets".output; 
@@ -234,7 +237,7 @@ done 2> /dev/null &
 }
 
 # Same as otpbatch but with verbose output
-reqbatch () {
+reqbatch() {
 for datasets in $(ls ~/seeds/*); do
 echo "setting $datasets to b.xor";
 cat $datasets | stripper > ~/seeds/b.xor;
@@ -245,7 +248,7 @@ done 2> /dev/null
 }
 
 # Run a validation check on the seed files.
-libvalidate () {
+libvalidate() {
 for data in $(ls ~/seeds/*); do
     echo "$data"; 
     cat "$data" | wc -c; 
@@ -255,7 +258,7 @@ done
 }
 
 # Generate a medium sized library of binary digits for playing with.
-function libgen () { 
+libgen() { 
     for x in {1000..9999}; 
         do int2bin "$x" > "$x".xor ; 
     done
@@ -263,32 +266,27 @@ function libgen () {
 
 ######### Python extra tools section below.
 
-function byteconv () {
+byteconv() {
 python -c "import pprint;pprint.pprint(zip(('Byte', 'KByte', 'MByte', 'GByte', 'TByte'), (1 << 10*i for i in xrange(5))))"
 }
-
-function csv2json () {
+sv2json() {
 python -c "import csv,json;print json.dumps(list(csv.reader(open('csv_file.csv'))))"
 }
-
-function dhex () {
+dhex() {
 export HEXIN=$1 ; python -c "print ''.join(chr(int(''.join(i), 16)) for i in zip(*[iter('$HEXIN')]*2))"; 
 }
 
 # Now the python -m group, thanks PEP 338.
 
-function tokenize () {
+tokenize() {
 python -m "import sys; print sys.stdin.read().replace('\r','').split('\n\n',2)[1]";
 }
-
-function calendar () {
+calendar() {
 python -m "import sys; print sys.stdin.read().replace('\r','').split('\n\n',2)[1]";
 }
-
-function cgi-it () {
+cgi-it() {
 python -m "import sys; print sys.stdin.read().replace('\r','').split('\n\n',2)[1]";
 }
-
-function termweb () {
+termweb() {
 python -m 'webbrowser'
 }
