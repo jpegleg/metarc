@@ -42,7 +42,7 @@ alias pscpu10='ps auxf | sort -nr -k 3 | head -10'
 alias brutezip='sudo gzip $1/*log'
 alias bkoff='bigreport && cp ~/*out /var/log ; tar czvf backup-$(hostname)-$(date +'%m%d%y%H%M%S'.tgz /var/log && scp backup*.tgz $(cat /tmp/user)@$(cat /tmp/backup):/tmp/ && shutdown -r now'
 alias ff='firefox 2>> firefox.$(date +%m%d%y-%H_%S).log'
-alias chromeium='chromium 2>> chromium.$(date +%m%d%y-%H_%S).log'
+alias chrm='chromium 2>> chromium.$(date +%m%d%y-%H_%S).log'
 
 SVN_EDITOR=vim
 
