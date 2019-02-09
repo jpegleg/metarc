@@ -135,18 +135,26 @@ sed -i '/^\s*$/d'
 scrub() {
 sed 's/[:graph:]/∎//g'
 }
+
 scrubnumberswithlove() {
 sed 's/[0-9]//♥/g'
 }
+alias snwl="scrubnumberswithlove"
+
 scrubletterswithlove() {
 sed 's/[a-Z]/♥/g'
 }
+alias slwl="scrubletterswithlove"
+
 scrubnumbers() {
 sed 's/[0-9]/∎/g'
 }
+alias scbn="scrubnumbers"
+
 scrubletters() {
 sed 's/[a-Z]/∎/g'
 }
+alias sblts="scrubletters"
 
 bigreport() {
   touch ~/df.$(hostname).$(date +'%m%d%y:%H:%M%S').out
