@@ -59,6 +59,15 @@ ext-ip() {
     lynx --dump $1; 
 }
 
+netest() {
+    val=$(which ss)
+    if [ -z $val ]; then
+      ss -an | grep -v u_str | grep EST
+    else
+      netstat -tan | grep EST
+    fi
+}
+
 extract() {
     if [ -f $1 ] ; then
         case $1 in
