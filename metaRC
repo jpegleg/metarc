@@ -93,6 +93,24 @@ extract() {
     fi
 }
 
+tst() {
+    month="$1"
+    find . -newermt "01-$month -1 sec" -and -not -newermt "01-$month +1 month -1 sec" -exec tar -rvf $1.tar {} \;
+    gzip -9 $1.tar || echo "No data from $month found."
+}
+
+dsort() {
+for y in 2019 2018 2017 2016 2015 2014 2013 2012 2011 2010 2009; do
+  echo "Year $y";
+  for x in Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec; do
+    echo "Setting Month to $x";
+    passalong=$x-$y
+    tst $passalong
+  done
+  echo "Completed year $y..."
+done
+}
+
 repeat() {
     local i max
     max=$1; shift;
