@@ -278,13 +278,13 @@ done 2> /dev/null &
 
 # Same as otpbatch but with verbose output
 reqbatch() {
-for datasets in $(ls ~/seeds/*); do
-echo "setting $datasets to b.xor";
-cat $datasets | stripper > ~/seeds/b.xor;
-echo "now b.xor is $(cat ~/seeds/b.xor)";
-echo "XOR $datasets against a.xor - $(cat ~/seeds/a.xor)"
-exor > "$datasets".output;
-done 2> /dev/null 
+for datasets in $(ls ~/seeds/*.xor); do
+  mv $datasets ~/seeds.b.xor
+  cp $datasets ~/seeds/b.xor
+  echo "now b.xor is $(cat ~/seeds/b.xor)";
+  echo "XOR $datasets against a.xor - $(cat ~/seeds/a.xor)"
+  echo $(exor) > "$datasets".output;
+done 
 }
 
 # Run a validation check on the seed files.
