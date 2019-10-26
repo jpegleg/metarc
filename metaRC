@@ -42,7 +42,7 @@ alias ff='firefox 2>> firefox.$(date +%m%d%y-%H_%S).log'
 alias chrm='chromium 2>> chromium.$(date +%m%d%y-%H_%S).log'
 # openssl section
 alias rsa4096='openssl genrsa 4096'
-alias rsa048='openssl genrsa 2048'
+alias rsa2048='openssl genrsa 2048'
 alias newcsr='openssl req -out CSR.csr -new -key ' # pass the key name after the alias like: newcsr mykey.key
 alias checkcsr='openssl req -text -noout -verify -in' # pass the csr name like: checkcsr CSR.csr
 alias checkkey='openssl rsa -check -in' # pass the key name like: checkkey mykey.key
