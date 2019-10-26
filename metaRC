@@ -15,6 +15,8 @@ export PS1='\t \[\e[0;3$(($RANDOM%7+1))m\]\H:/$(pwd) \j > \[\e[00m\]'
 BASH_ENV=$HOME/.bashrc
 HISTTIMEFORMAT=$(date +%Y%m%d-%H%M%S--)
 
+SVN_EDITOR=vim
+
 # Toolbox .bashrc
 alias psg='ps aux | grep "$1"'
 alias bck='cp $1 $1.$(date +"%m%d%y").bak && cp /dev/null $1 && gzip $1.$(date +"%m%d%y").bak'
@@ -40,7 +42,9 @@ alias brutezip='sudo gzip $1/*log'
 alias bkoff='bigreport && cp ~/*out /var/log ; tar czvf backup-$(hostname)-$(date +'%m%d%y%H%M%S'.tgz /var/log && scp backup*.tgz $(cat /tmp/user)@$(cat /tmp/backup):/tmp/ && shutdown -r now'
 alias ff='firefox 2>> firefox.$(date +%m%d%y-%H_%S).log'
 alias chrm='chromium 2>> chromium.$(date +%m%d%y-%H_%S).log'
+
 # openssl section
+
 alias rsa4096='openssl genrsa 4096'
 alias rsa2048='openssl genrsa 2048'
 alias newcsr='openssl req -out CSR.csr -new -key ' # pass the key name after the alias like: newcsr mykey.key
@@ -50,7 +54,6 @@ alias checkcrt='openssl x509 -text -noout -in' # pass the cert name like: checkc
 alias gencacert='openssl -req -new -x509 -key ./ca.key -out ca.crt'
 alias signcsr='openssl x509 -req -days 360 -in CSR.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out example.crt -sha256'
 alias signv3='openssl x509 -req -days 360 -in CSR.csr -extfile v3.ext -CA ca.crt -CAkey ca.key -CAcreateserial -out example.crt -sha256'
-SVN_EDITOR=vim
 alias gendh2048='openssl dhparam -out /etc/dhparam-2048 2048'
 alias gendh4096='openssl dhparam -out /etc/dhparam-4096 4096'
 
