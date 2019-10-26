@@ -51,7 +51,8 @@ alias gencacert='openssl -req -new -x509 -key ./ca.key -out ca.crt'
 alias signcsr='openssl x509 -req -days 360 -in CSR.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out example.crt -sha256'
 alias signv3='openssl x509 -req -days 360 -in CSR.csr -extfile v3.ext -CA ca.crt -CAkey ca.key -CAcreateserial -out example.crt -sha256'
 SVN_EDITOR=vim
-
+alias gendh2048='openssl dhparam -out /etc/dhparam-2048 2048'
+alias gendh4096='openssl dhparam -out /etc/dhparam-4096 4096'
 
 ######################################## ->  
 #                                            ->          ->
