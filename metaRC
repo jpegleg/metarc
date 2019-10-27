@@ -57,6 +57,8 @@ alias signv3='openssl x509 -req -days 365 -in CSR.csr -extfile v3.ext -CA ca.crt
 alias gendh2048='openssl dhparam -out /etc/dhparam-2048 2048'
 alias gendh4096='openssl dhparam -out /etc/dhparam-4096 4096'
 
+
+
 ######################################## ->  
 #                                            ->          ->
 #                                     -->     ->
@@ -64,6 +66,21 @@ alias gendh4096='openssl dhparam -out /etc/dhparam-4096 4096'
 #                                   ->                ->
 #                                      --->  -> 
 ########################################          ->
+
+
+ufw-root-ssh-ban () {
+for x in $(grep Failed.password.for.root /var/log/auth.log | awk '{print $11}' | sort -u ); do
+  ufw insert 1 deny from $x to any port 22;
+done
+ufw reload
+}
+
+ufw-all-ssh-ban () {
+for x in $(grep Failed.password.for /var/log/auth.log | awk '{print $11}' | sort -u ); do
+  ufw insert 1 deny from $x to any port 22;
+done
+ufw reload
+}
 
 ext-ip() { 
     lynx --dump $1; 
