@@ -73,7 +73,7 @@ osenc-setup () {
 }
 
 # example:
-# osenc--file my-secretfile.txt mysecretfile.txt.asc
+# osenc my-secretfile.txt mysecretfile.txt.asc
 osenc-file () { 
   openssl enc -aes256 -base64 -salt -in $1 -out $2 -pass file:./keybin
 }
