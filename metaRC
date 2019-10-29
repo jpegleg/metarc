@@ -10,10 +10,7 @@ if ! shopt -oq posix; then
   fi
 fi
 
-# fun PS1 to use that rotates colors
-# export PS1='\t \[\e[0;3$(($RANDOM%7+1))m\]\H:/$(pwd) \j > \[\e[00m\]'
-# same thing but just sticks to 32m
-export PS1='\t \[\e[0;32m\]\H:/$(pwd) \j > \[\e[00m\]'
+export PS1='\e[0;44m\]\t\[\e[00m\] \[\e[0;36m\]\H\[\e[0;34m\]:\[\e[0;68m\]/$(pwd) \[\e[0;32m\]\j \[\e[0;36m\]> \[\e[00m\]'
 
 
 BASH_ENV=$HOME/.bashrc
