@@ -64,28 +64,49 @@ alias rand64='openssl rand -base64 32' # redirect to a file
 # Generally I would use GNUPG, but if that isn't an option
 # I would do a an openssl/libressl implementation, examples below.
 
-# example:
 # osenc-setup 
 osenc-setup () {
   openssl genrsa 4096 > secret-rsa.pem
   openssl rsa -in secret-rsa.pem -pubout -outform pem > rsa.pub
+}
+
+# osenc-passgen
+osenc-enc-pass () {
   openssl rand -base64 32 > key.bin
   openssl rsautl -encrypt -inkey rsa.pub -pubin -in key.bin -out key.bin.enc
 }
 
-# example:
 # osenc my-secretfile.txt mysecretfile.txt.asc
 osenc-file () { 
   openssl enc -aes256 -base64 -salt -in $1 -out $2 -pass file:./key.bin
 }
 
-# example:
 # osenc-decrypt my-secretfile.txt mysecretfile.txt.asc
 osenc-decrypt () {
   openssl rsautl -decrypt -inkey secret-rsa.pem -in key.bin.enc -out key.bin 
   openssl enc -d -aes256 -in $1 -out $2 -pass file:./key.bin 
 }
 
+# usage of this openssl/libressl thing with the functions above involves both sides(people and/or computer) to do it correctly
+# pgp (gpg) public key encryption is a much better solution
+# but some machines or situations can't use gpg but can use openssl
+
+# Person A runs the functions contents like:
+# $ osenc-setup
+# $ cp rsa.pub Person-A.rsa.pub
+# Then Person A sends Person-A.rsa.pub to Person B. 
+
+# Person B runs the functions contents like:
+# $ cp Person-A.rsa.pub rsa.pub
+# $ osenc-passgen
+# $ osenc-file Person-B-secret-for-Person-A.txt Person-B-secret-for-Person-A.txt.asc
+# $ cp key.bin.enc Person-B-key.bin.enc
+# Then Person B sends the Person-B-secret-for-Person-A.txt.asc file along with Person-B-key.bin.enc
+
+# Then person A can decrypt Person B's key.bin.enc, and then decrypt Person-B-secret-for-Person-A.txt.asc
+# like so:
+# $ cp Person-B-key.bin.enc key.bin.enc 
+# $ osenc-decrypt
 
 ######################################## ->  
 #                                            ->          ->
