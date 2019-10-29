@@ -69,7 +69,7 @@ osenc-setup () {
   openssl genrsa 4096 > secret-rsa.pem
   openssl rsa -in secret-rsa.pem -pubout -outform pem > rsa.pub
   openssl rand -base64 32 > key.bin
-  openssl rsautl -encrypt -inkey secret-rsa.pem -pubin rsa.pub -in key.bin -out key.bin.enc
+  openssl rsautl -encrypt -inkey rsa.pub -in key.bin -out key.bin.enc
 }
 
 # example:
