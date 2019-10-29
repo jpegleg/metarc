@@ -45,6 +45,8 @@ alias chrm='chromium 2>> chromium.$(date +%m%d%y-%H_%S).log'
 
 # openssl section
 
+alias speedtest='openssl speed'
+
 alias rsa4096='openssl genrsa 4096'
 alias rsa2048='openssl genrsa 2048'
 alias newcsr='openssl req -out CSR.csr -new -key ' # pass the key name after the alias like: newcsr mykey.key
@@ -56,7 +58,32 @@ alias signcsr='openssl x509 -req -days 360 -in CSR.csr -CA ca.crt -CAkey ca.key 
 alias signv3='openssl x509 -req -days 365 -in CSR.csr -extfile v3.ext -CA ca.crt -CAkey ca.key -CAcreateserial -out example.crt -sha256'
 alias gendh2048='openssl dhparam -out /etc/dhparam-2048 2048'
 alias gendh4096='openssl dhparam -out /etc/dhparam-4096 4096'
+alias rand64='openssl rand -base64 32' # redirect to a file
 
+# Generally I would use GNUPG, but if that isn't an option
+# I would do a an openssl/libressl implementation, examples below.
+
+# example:
+# osenc-setup 
+osenc-setup () {
+  openssl genrsa 4096 > secret-rsa.pem
+  openssl rsa -in secret-rsa.pem -pubout -outform pem > rsa.pub
+  openssl rand -base64 32 > key.bin
+  openssl rsautl -encrypt -inkey secret-rsa.pem -pubin -in key.bin -out key.bin.enc
+}
+
+# example:
+# osenc--file my-secretfile.txt mysecretfile.txt.asc
+osenc-file () { 
+  openssl enc -aes256 -base64 -salt -in $1 -out $2 -pass file:./keybin
+}
+
+# example:
+# osenc-decrypt my-secretfile.txt mysecretfile.txt.asc
+osenc-decrypt () {
+  openssl rsautl -decrypt -inkey secret-rsa.pem -in key.bin.enc -out key.bin 
+  openssl enc -d -aes256 -in $1 -out $2 -pass file:./key.bin 
+}
 
 
 ######################################## ->  
