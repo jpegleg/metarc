@@ -12,8 +12,8 @@ fi
 
 # fun PS1 to use that rotates colors
 # export PS1='\t \[\e[0;3$(($RANDOM%7+1))m\]\H:/$(pwd) \j > \[\e[00m\]'
-# same thing but just sticks to 33m
-export PS1='\t \[\e[0;33m\]\H:/$(pwd) \j > \[\e[00m\]'
+# same thing but just sticks to 32m
+export PS1='\t \[\e[0;32m\]\H:/$(pwd) \j > \[\e[00m\]'
 
 
 BASH_ENV=$HOME/.bashrc
@@ -73,7 +73,7 @@ osenc-setup () {
   openssl genrsa 4096 > secret-rsa.pem
   openssl rsa -in secret-rsa.pem -pubout -outform pem > rsa.pub
   openssl rand -base64 32 > key.bin
-  openssl rsautl -encrypt -inkey rsa.pub -in key.bin -out key.bin.enc
+  openssl rsautl -encrypt -inkey rsa.pub -pubin -in key.bin -out key.bin.enc
 }
 
 # example:
