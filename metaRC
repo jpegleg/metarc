@@ -91,6 +91,8 @@ osenc-decrypt () {
 # pgp (gpg) public key encryption is a much better solution
 # but some machines or situations can't use gpg but can use openssl
 
+# Example situation where Person B needs to share secrets with Person A.
+
 # Person A runs the functions contents like:
 # $ osenc-setup
 # $ cp rsa.pub Person-A.rsa.pub
