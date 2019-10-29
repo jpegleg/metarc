@@ -10,7 +10,11 @@ if ! shopt -oq posix; then
   fi
 fi
 
-export PS1='\t \[\e[0;3$(($RANDOM%7+1))m\]\H:/$(pwd) \j > \[\e[00m\]'
+# fun PS1 to use that rotates colors
+# export PS1='\t \[\e[0;3$(($RANDOM%7+1))m\]\H:/$(pwd) \j > \[\e[00m\]'
+# same thing but just sticks to 33m
+export PS1='\t \[\e[0;33m\]\H:/$(pwd) \j > \[\e[00m\]'
+
 
 BASH_ENV=$HOME/.bashrc
 HISTTIMEFORMAT=$(date +%Y%m%d-%H%M%S--)
