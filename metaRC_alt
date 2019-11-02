@@ -75,7 +75,7 @@ osenc-file () {
 
 osenc-decrypt () {
   openssl rsautl -decrypt -inkey secret-rsa.pem -in key.bin.enc -out key.bin 
-  openssl enc -d -aes256 -in $1 -out $2 -pass file:./key.bin 
+  openssl enc -d -aes256 -base64 -in $1 -out $2 -pass file:./key.bin 
 }
 
 ufw-root-ssh-ban () {
