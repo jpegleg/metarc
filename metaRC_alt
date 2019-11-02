@@ -21,14 +21,11 @@ alias scripter='cd /usr/local/scripts'
 alias cfger='cd /usr/local/cfgs'
 alias brutezip='sudo gzip $1/*log'
 alias bkoff='bigreport && cp ~/*out /var/log ; tar czvf backup-$(hostname)-$(date +'%m%d%y%H%M%S'.tgz /var/log && scp backup*.tgz $(cat /tmp/user)@$(cat /tmp/backup):/tmp/ && shutdown -r now'
-alias ff='firefox 2>> firefox.$(date +%m%d%y-%H_%S).log'
-alias chrm='chromium 2>> chromium.$(date +%m%d%y-%H_%S).log'
 alias shredhard='shred -v -n 25 -u -z'
 
 # openssl section
 
 alias speedtest='openssl speed'
-
 alias rsa4096='openssl genrsa 4096'
 alias rsa2048='openssl genrsa 2048'
 alias newcsr='openssl req -out CSR.csr -new -key ' # pass the key name after the alias like: newcsr mykey.key
