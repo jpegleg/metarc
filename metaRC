@@ -85,7 +85,7 @@ osenc-file () {
 # osenc-decrypt mysecretfile.txt.asc my-secretfile.txt
 osenc-decrypt () {
   openssl rsautl -decrypt -inkey secret-rsa.pem -in key.bin.enc -out key.bin 
-  openssl enc -d -aes256 -in $1 -out $2 -pass file:./key.bin 
+  openssl enc -d -aes256 -base64 -in $1 -out $2 -pass file:./key.bin 
 }
 
 # usage of this openssl/libressl thing with the functions above involves both sides(people and/or computer) to do it correctly
