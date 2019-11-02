@@ -82,7 +82,7 @@ osenc-file () {
   openssl enc -aes256 -base64 -salt -in $1 -out $2 -pass file:./key.bin
 }
 
-# osenc-decrypt my-secretfile.txt mysecretfile.txt.asc
+# osenc-decrypt mysecretfile.txt.asc my-secretfile.txt
 osenc-decrypt () {
   openssl rsautl -decrypt -inkey secret-rsa.pem -in key.bin.enc -out key.bin 
   openssl enc -d -aes256 -in $1 -out $2 -pass file:./key.bin 
