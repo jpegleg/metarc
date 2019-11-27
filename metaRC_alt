@@ -68,13 +68,13 @@ osenc-enc-pass () {
 
 
 osenc-file () { 
-  openssl enc -aes256 -base64 -salt -in $1 -out $2 -pass file:./key.bin
+  openssl enc -aes256 -base64 -pbkdf2 -salt -in $1 -out $2 -pass file:./key.bin
 }
 
 
 osenc-decrypt () {
   openssl rsautl -decrypt -inkey secret-rsa.pem -in key.bin.enc -out key.bin 
-  openssl enc -d -aes256 -base64 -in $1 -out $2 -pass file:./key.bin 
+  openssl enc -d -aes256 -base64 -pbkdf2 -in $1 -out $2 -pass file:./key.bin 
 }
 
 ufw-root-ssh-ban () {
