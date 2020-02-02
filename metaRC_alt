@@ -26,6 +26,7 @@ alias shredhard='shred -v -n 25 -u -z'
 # openssl section
 
 alias speedtest='openssl speed'
+alias ecckey='openssl ecparam -out ecc.key -name prime256v1 -genkey'
 alias rsa4096='openssl genrsa 4096'
 alias rsa2048='openssl genrsa 2048'
 alias newcsr='openssl req -out CSR.csr -new -key ' # pass the key name after the alias like: newcsr mykey.key
