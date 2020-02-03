@@ -254,7 +254,7 @@ sed -i '/^\s*$/d'
 }
 
 scrub() {
-sed 's/[:graph:]/∎//g'
+sed 's/[:graph:]/∎/g'
 }
 
 scrubnumberswithlove() {
