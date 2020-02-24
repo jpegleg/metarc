@@ -63,8 +63,26 @@ alias gendh2048='openssl dhparam -out /etc/dhparam-2048 2048'
 alias gendh4096='openssl dhparam -out /etc/dhparam-4096 4096'
 alias rand64='openssl rand -base64 32' # redirect to a file
 
-# Generally I would use GNUPG, but if that isn't an option
-# I would do a an openssl/libressl implementation, examples below.
+# ECC manual operations with openssl
+
+gensecp () {
+openssl ecparam -name secp384r1 -genkey -noout -out secp384r1.pem
+openssl ec -in secp384r1.pem -pubout -out secp384r1.pub
+}
+
+derive () {
+openssl pkeyutl -derive -inkey secp384r1.pem -peerkey peerpub.pem -out secret.bin
+}
+
+ecenc () {
+openssl enc -aes256 -base64 -k $(base64 secret.bin) -e -in $1 -out $2
+
+ecdec () {
+openssl enc -aes256 -base64 -k $(base64 secret.bin) -d -in $1 -out p$2
+}
+
+
+# RSA manual operations with openssl
 
 # osenc-setup 
 osenc-setup () {
