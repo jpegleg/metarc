@@ -63,14 +63,15 @@ openssl ec -in secp384r1.pem -pubout -out secp384r1.pub
 }
 
 derive () {
-openssl pkeyutl -derive -inkey secp384r1.pem -peerkey peerpub.pem -out secret.bin
+  openssl pkeyutl -derive -inkey secp384r1.pem -peerkey peerpub.pem -out secret.bin
 }
 
 ecenc () {
-openssl enc -aes256 -base64 -k $(base64 secret.bin) -e -in $1 -out $2
+  openssl enc -aes256 -base64 -k $(base64 secret.bin) -e -in $1 -out $2
+}
 
 ecdec () {
-openssl enc -aes256 -base64 -k $(base64 secret.bin) -d -in $1 -out p$2
+  openssl enc -aes256 -base64 -k $(base64 secret.bin) -d -in $1 -out p$2
 }
 
 # rsa manual section with openssl
@@ -96,6 +97,19 @@ osenc-decrypt () {
   openssl rsautl -decrypt -inkey secret-rsa.pem -in key.bin.enc -out key.bin 
   openssl enc -d -aes256 -base64 -pbkdf2 -in $1 -out $2 -pass file:./key.bin 
 }
+
+# RSA signing and verify with openssl
+
+# first argument is plaintext file name/path, second is signed plaintext file name/path, third is RSA private key name/path
+rsasign () {
+  openssl rsautl -sign -in $1 -inkey $3 -out $2
+}
+
+# first argument is RSA public key, second argument is signed plaintext
+rsaverify () {
+  openssl rsautl -verify -in $2 -inkey $1 -pubin
+}
+
 
 ufw-root-ssh-ban () {
 for x in $(grep Failed.password.for.root /var/log/auth.log | awk '{print $11}' | sort -u ); do
