@@ -53,6 +53,8 @@ alias extractpubfromcert='openssl x509 -in extract.crt  -noout -pubkey > cert.pu
 alias ecckey='openssl ecparam -out ecc.key -name prime256v1 -genkey'
 alias rsa4096='openssl genrsa 4096'
 alias rsa2048='openssl genrsa 2048'
+alias rsasign='openssl rsautl -sign -in input.txt -inkey rsa.pem -out output.sign'
+alias rsaverify='openssl rsautl -verify -in output.sign -inkey rsa.pub -pubin'
 alias newcsr='openssl req -out CSR.csr -new -key ' # pass the key name after the alias like: newcsr mykey.key
 alias checkcsr='openssl req -text -noout -verify -in' # pass the csr name like: checkcsr CSR.csr
 alias checkkey='openssl rsa -check -in' # pass the key name like: checkkey mykey.key
@@ -108,18 +110,6 @@ osenc-decrypt () {
   openssl rsautl -decrypt -inkey secret-rsa.pem -in key.bin.enc -out key.bin 
   openssl enc -d -aes256 -base64 -in $1 -out $2 -pass file:./key.bin 
 }
-
-
-# RSA signing and verify with openssl
-
-rsasign () {
-  openssl rsautl -sign -in input.txt -inkey rsa.pem -out output.sign
-}
-
-rsaverify () {
-  openssl rsautl -verify -in output.sign -inkey rsa.pub -pubin
-}
-
 
 # usage of this openssl/libressl thing with the functions above involves both sides(people and/or computer) to do it correctly
 # pgp (gpg) public key encryption is a much better solution
