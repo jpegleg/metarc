@@ -48,7 +48,8 @@ alias shredhard='shred -v -n 25 -u -z'
 # openssl section
 
 alias speedtest='openssl speed'
-
+alias extractrsapub='openssl rsa -in rsa-key.pem -pubout > rsa.pub'
+alias extractpubfromcert='openssl x509 -in extract.crt  -noout -pubkey > cert.pub'
 alias ecckey='openssl ecparam -out ecc.key -name prime256v1 -genkey'
 alias rsa4096='openssl genrsa 4096'
 alias rsa2048='openssl genrsa 2048'
@@ -111,14 +112,12 @@ osenc-decrypt () {
 
 # RSA signing and verify with openssl
 
-# first argument is plaintext file name/path, second is signed plaintext file name/path, third is RSA private key name/path
 rsasign () {
-  openssl rsautl -sign -in $1 -inkey $3 -out $2
+  openssl rsautl -sign -in input.txt -inkey rsa.pem -out output.sign
 }
 
-# first argument is RSA public key, second argument is signed plaintext
 rsaverify () {
-  openssl rsautl -verify -in $2 -inkey $1 -pubin
+  openssl rsautl -verify -in output.sign -inkey rsa.pub -pubin
 }
 
 
