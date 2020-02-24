@@ -66,19 +66,20 @@ alias rand64='openssl rand -base64 32' # redirect to a file
 # ECC manual operations with openssl
 
 gensecp () {
-openssl ecparam -name secp384r1 -genkey -noout -out secp384r1.pem
-openssl ec -in secp384r1.pem -pubout -out secp384r1.pub
+  openssl ecparam -name secp384r1 -genkey -noout -out secp384r1.pem
+  openssl ec -in secp384r1.pem -pubout -out secp384r1.pub
 }
 
 derive () {
-openssl pkeyutl -derive -inkey secp384r1.pem -peerkey peerpub.pem -out secret.bin
+  openssl pkeyutl -derive -inkey secp384r1.pem -peerkey peerpub.pem -out secret.bin
 }
 
 ecenc () {
-openssl enc -aes256 -base64 -k $(base64 secret.bin) -e -in $1 -out $2
+  openssl enc -aes256 -base64 -k $(base64 secret.bin) -e -in $1 -out $2
+}
 
 ecdec () {
-openssl enc -aes256 -base64 -k $(base64 secret.bin) -d -in $1 -out p$2
+  openssl enc -aes256 -base64 -k $(base64 secret.bin) -d -in $1 -out p$2
 }
 
 
@@ -106,6 +107,20 @@ osenc-decrypt () {
   openssl rsautl -decrypt -inkey secret-rsa.pem -in key.bin.enc -out key.bin 
   openssl enc -d -aes256 -base64 -in $1 -out $2 -pass file:./key.bin 
 }
+
+
+# RSA signing and verify with openssl
+
+# first argument is plaintext file name/path, second is signed plaintext file name/path, third is RSA private key name/path
+rsasign () {
+  openssl rsautl -sign -in $1 -inkey $3 -out $2
+}
+
+# first argument is RSA public key, second argument is signed plaintext
+rsaverify () {
+  openssl rsautl -verify -in $2 -inkey $1 -pubin
+}
+
 
 # usage of this openssl/libressl thing with the functions above involves both sides(people and/or computer) to do it correctly
 # pgp (gpg) public key encryption is a much better solution
