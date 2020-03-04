@@ -157,11 +157,11 @@ done
 ufw reload
 }
 
-ext-ip() { 
+ext-ip () { 
     lynx --dump $1; 
 }
 
-netest() {
+netest () {
     val=$(which ss)
     if [ -z $val ]; then
       ss -an | grep -v u_str | grep EST
@@ -170,7 +170,7 @@ netest() {
     fi
 }
 
-extract() {
+extract () {
     if [ -f $1 ] ; then
         case $1 in
             *.tar.bz2)   tar xvjf $1     ;;
@@ -191,14 +191,14 @@ extract() {
     fi
 }
 
-tst() {
+tst () {
     month="$1"
     find . -newermt "01-$month -1 sec" -and -not -newermt "01-$month +1 month -1 sec" -exec tar -rvf $1.tar {} \;
     gzip -9 $1.tar || echo "No data from $month found."
 }
 
-dsort() {
-for y in 2019 2018 2017 2016 2015 2014 2013 2012 2011 2010 2009; do
+dsort () {
+for y in 2020 2019 2018 2017 2016 2015 2014 2013 2012 2011 2010; do
   echo "Year $y";
   for x in Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec; do
     echo "Setting Month to $x";
@@ -209,7 +209,7 @@ for y in 2019 2018 2017 2016 2015 2014 2013 2012 2011 2010 2009; do
 done
 }
 
-repeat() {
+repeat () {
     local i max
     max=$1; shift;
     for ((i=1; i <= max ; i++)); do  # --> C-like syntax
@@ -221,11 +221,11 @@ lsnp() {
 ls -l $1 | awk '{k=0;for(i=0;i<=8;i++)k+=((substr($1,i+2,1)~/[rwx]/) *2^(8-i));if(k)printf("%0o ",k);print}'; 
 }
 
-statl() {
+statl () {
 stat -c '%a %n' 
 }
 
-remindperms() {
+remindperms () {
 echo "0    (No read, no write, no execute)     ---"
 echo "1    (No read, no write, execute)    --x"
 echo "2    (No read, write, no execute)    -w-"
@@ -262,44 +262,44 @@ for fgbg in 38 48 ; do # Foreground / Background
 done
 }
 
-stripsp() {
+stripsp () {
 tr -d '\040\011\012\015'
 }
-stripbl() {
+stripbl () {
 tr -d '[blank]'
 }
-rmblank() {
+rmblank () {
 sed '/^\s*$/d'
 }
-rmblankw() {
+rmblankw () {
 sed -i '/^\s*$/d'
 }
 
-scrub() {
+scrub () {
 sed 's/[:graph:]/∎/g'
 }
 
-scrubnumberswithlove() {
+scrubnumberswithlove () {
 sed 's/[0-9]//♥/g'
 }
 alias snwl="scrubnumberswithlove"
 
-scrubletterswithlove() {
+scrubletterswithlove () {
 sed 's/[a-Z]/♥/g'
 }
 alias slwl="scrubletterswithlove"
 
-scrubnumbers() {
+scrubnumbers () {
 sed 's/[0-9]/∎/g'
 }
 alias scbn="scrubnumbers"
 
-scrubletters() {
+scrubletters () {
 sed 's/[a-Z]/∎/g'
 }
 alias sblts="scrubletters"
 
-bigreport() {
+bigreport () {
   touch ~/df.$(hostname).$(date +'%m%d%y:%H:%M%S').out
   touch ~/lsof.$(hostname).$(date +'%m%d%y:%H:%M%S').out
   touch  ~/netstat.$(hostname).$(date +'%m%d%y:%H:%M%S').out
@@ -317,7 +317,7 @@ bigreport() {
   last > ~/last.$(hostname).$(date +'%m%d%y:%H:%M%S').out
 }
 
-harvest() {
+harvest () {
   for x in $@ ; do tar czvf harvest.$(date +'%m%d%y').$(hostname).$(echo "$@" | tr -d '\040\011\012\015').tgz "$x"; done
 }
 
@@ -339,7 +339,7 @@ export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; histor
 
 # Convert common decimals to binary.
 # The int2bin function can only handle 20 character inputs at a time.
-int2bin() {
+int2bin () {
     num="$1"
     bin=""
     padding=""
@@ -359,21 +359,21 @@ int2bin() {
 # to prepare for bitwise XOR.
 
 # Convert binary to decimal. This thing needs work.
-bin2dec() {
+bin2dec () {
     echo $((2#$1))
 }
 
 # Return the seed length.
-msglgth() {
+msglgth () {
 SETMSGLGTH=$(cat ~/seeds/a.xor | wc -c)
 }
 
 # Bitwise XOR.
-exor() {
+exor () {
 bash ~/Scripts/xor.sh
 }
 # Repeat n times command.
-repeat() {
+repeat () {
     local i max
     max=$1; shift;
     for ((i=1; i <= max ; i++)); do  # --> C-like syntax
@@ -381,7 +381,7 @@ repeat() {
     done
 }
 # One-time-pad batch XOR.
-otpbatch() {
+otpbatch () {
 for datasets in $(ls ~/seeds/*); do 
     cat $datasets | stripper > ~/seeds/b.xor; 
     exor > "$datasets".output; 
@@ -389,7 +389,7 @@ done 2> /dev/null &
 }
 
 # Same as otpbatch but with verbose output
-reqbatch() {
+reqbatch () {
 for datasets in $(ls ~/seeds/*.xor); do
   cp $datasets ~/seeds/b.xor
   echo "now b.xor is $(cat ~/seeds/b.xor)";
@@ -399,7 +399,7 @@ done
 }
 
 # Run a validation check on the seed files.
-libvalidate() {
+libvalidate () {
 for data in $(ls ~/seeds/*); do
     echo "$data"; 
     cat "$data" | wc -c; 
@@ -409,7 +409,7 @@ done
 }
 
 # Generate a medium sized library of binary digits for playing with.
-libgen() { 
+libgen () { 
     for x in {1000..9999}; 
         do int2bin "$x" > "$x".xor ; 
     done
