@@ -96,7 +96,7 @@ osenc-decrypt () {
 }
 
 
-netest() {
+netest () {
     val=$(which ss)
     if [ -z $val ]; then
       ss -an | grep -v u_str | grep EST
@@ -105,7 +105,7 @@ netest() {
     fi
 }
 
-extract() {
+extract () {
     if [ -f $1 ] ; then
         case $1 in
             *.tar.bz2)   tar xvjf $1     ;;
@@ -126,13 +126,13 @@ extract() {
     fi
 }
 
-tst() {
+tst () {
     month="$1"
     find . -newermt "01-$month -1 sec" -and -not -newermt "01-$month +1 month -1 sec" -exec tar -rvf $1.tar {} \;
     gzip -9 $1.tar || echo "No data from $month found."
 }
 
-dsort() {
+dsort () {
 for y in 2019 2018 2017 2016 2015 2014 2013 2012 2011 2010 2009; do
   echo "Year $y";
   for x in Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec; do
@@ -144,7 +144,7 @@ for y in 2019 2018 2017 2016 2015 2014 2013 2012 2011 2010 2009; do
 done
 }
 
-repeat() {
+repeat () {
     local i max
     max=$1; shift;
     for ((i=1; i <= max ; i++)); do  # --> C-like syntax
@@ -152,42 +152,42 @@ repeat() {
     done
 }
 
-lsnp() { 
+lsnp () { 
 ls -l $1 | awk '{k=0;for(i=0;i<=8;i++)k+=((substr($1,i+2,1)~/[rwx]/) *2^(8-i));if(k)printf("%0o ",k);print}'; 
 }
 
-statl() {
+statl () {
 stat -c '%a %n' 
 }
 
-stripsp() {
+stripsp () {
 tr -d '\040\011\012\015'
 }
-stripbl() {
+stripbl () {
 tr -d '[blank]'
 }
-rmblank() {
+rmblank () {
 sed '/^\s*$/d'
 }
-rmblankw() {
+rmblankw () {
 sed -i '/^\s*$/d'
 }
 
-scrub() {
+scrub () {
 sed 's/[:graph:]/∎//g'
 }
 
-scrubnumbers() {
+scrubnumbers () {
 sed 's/[0-9]/∎/g'
 }
 alias scbn="scrubnumbers"
 
-scrubletters() {
+scrubletters () {
 sed 's/[a-Z]/∎/g'
 }
 alias sblts="scrubletters"
 
-bigreport() {
+bigreport () {
   touch ~/df.$(hostname).$(date +'%m%d%y:%H:%M%S').out
   touch ~/lsof.$(hostname).$(date +'%m%d%y:%H:%M%S').out
   touch  ~/netstat.$(hostname).$(date +'%m%d%y:%H:%M%S').out
@@ -205,6 +205,6 @@ bigreport() {
   last > ~/last.$(hostname).$(date +'%m%d%y:%H:%M%S').out
 }
 
-harvest() {
+harvest () {
   for x in $@ ; do tar czvf harvest.$(date +'%m%d%y').$(hostname).$(echo "$@" | tr -d '\040\011\012\015').tgz "$x"; done
 }
