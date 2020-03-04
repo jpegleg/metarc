@@ -82,7 +82,7 @@ ecenc () {
 }
 
 ecdec () {
-  openssl enc -aes256 -base64 -k $(base64 secret.bin) -d -in $1 -out p$2
+  openssl enc -aes256 -base64 -k $(base64 secret.bin) -d -in $1 -out $2
 }
 
 
