@@ -65,6 +65,7 @@ alias signv3='openssl x509 -req -days 365 -in CSR.csr -extfile v3.ext -CA ca.crt
 alias gendh2048='openssl dhparam -out /etc/dhparam-2048 2048'
 alias gendh4096='openssl dhparam -out /etc/dhparam-4096 4096'
 alias rand64='openssl rand -base64 32' # redirect to a file
+alias ldapcert='openssl s_client -connect localhost:389 -starttls ldap -showcerts'
 
 # ECC manual operations with openssl
 
