@@ -1,0 +1,106 @@
+alias psg='ps aux | grep "$1"'
+alias lsl='ls -larth --color=auto'
+alias ls='ls --color=auto'
+alias pscpu='ps auxf | sort -nr -k 3'
+alias pscpu10='ps auxf | sort -nr -k 3 | head -10'
+alias l='ls -larth'
+
+alias speedtest='openssl speed'
+alias extractrsapub='openssl rsa -in rsa-key.pem -pubout > rsa.pub'
+alias extractpubfromcert='openssl x509 -in extract.crt  -noout -pubkey > cert.pub'
+alias ecckey='openssl ecparam -out ecc.key -name prime256v1 -genkey'
+alias rsa4096='openssl genrsa 4096'
+alias rsa2048='openssl genrsa 2048'
+alias rsasign='openssl rsautl -sign -in input.txt -inkey rsa.pem -out output.sign'
+alias rsaverify='openssl rsautl -verify -in output.sign -inkey rsa.pub -pubin'
+alias newcsr='openssl req -out CSR.csr -new -key ' # pass the key name after the alias like: newcsr mykey.key
+alias checkcsr='openssl req -text -noout -verify -in' # pass the csr name like: checkcsr CSR.csr
+alias checkkey='openssl rsa -check -in' # pass the key name like: checkkey mykey.key
+alias checkcrt='openssl x509 -text -noout -in' # pass the cert name like: checkcrt mycert.crt
+alias gencacert='openssl req -new -x509 -key ./ca.key -out ca.crt'
+alias signcsr='openssl x509 -req -days 360 -in CSR.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out example.crt -sha256'
+alias signv3='openssl x509 -req -days 365 -in CSR.csr -extfile v3.ext -CA ca.crt -CAkey ca.key -CAcreateserial -out example.crt -sha256'
+alias gendh2048='openssl dhparam -out /etc/dhparam-2048 2048'
+alias gendh4096='openssl dhparam -out /etc/dhparam-4096 4096'
+alias rand64='openssl rand -base64 32' # redirect to a file
+alias gpgp='gpg --list-packets'
+alias gpgl='gpg --list-keys'
+alias grsa='openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048'
+alias grsas='openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365'
+alias removekeypass='openssl rsa -in privateKey.pem -out newPrivateKey.pem'
+alias hashcheck='openssl x509 -noout -modulus -in certificate.crt | openssl md5; openssl rsa -noout -modulus -in privateKey.key | openssl md5; openssl req -noout -modulus -in CSR.csr | openssl md5'
+alias checkpk12p='openssl pkcs12 -info -in'
+alias requestsign='openssl req -newkey rsa:2048 -sha256 -nodes -out servercert.csr -outform PEM'
+alias ldapcert='openssl s_client -connect localhost:389 -starttls ldap -showcerts'
+
+
+getpin () {
+echo "enter site:";
+read hashsite &&
+openssl s_client -servername "$hashsite" -connect "$hashsite":443 | openssl x509 -pubkey -noout | openssl pkey -pubin -outform der | openssl dgst -sha256 -binary | openssl enc -base64;
+}
+
+# ECC manual operations with openssl
+
+gensecp () {
+openssl ecparam -name secp384r1 -genkey -noout -out secp384r1.pem
+openssl ec -in secp384r1.pem -pubout -out secp384r1.pub
+}
+
+derive () {
+  openssl pkeyutl -derive -inkey secp384r1.pem -peerkey peerpub.pem -out secret.bin
+}
+
+ecenc () {
+  openssl enc -aes256 -base64 -k $(base64 secret.bin) -e -in $1 -out $2
+}
+
+ecdec () {
+  openssl enc -aes256 -base64 -k $(base64 secret.bin) -d -in $1 -out $2
+}
+
+# rsa manual section with openssl
+
+osenc-setup () {
+  openssl genrsa 4096 > secret-rsa.pem
+  openssl rsa -in secret-rsa.pem -pubout -outform pem > rsa.pub
+}
+
+
+osenc-enc-pass () {
+  openssl rand -base64 32 > key.bin
+  openssl rsautl -encrypt -inkey rsa.pub -pubin -in key.bin -out key.bin.enc
+}
+
+
+osenc-file () {
+  openssl enc -aes256 -base64 -pbkdf2 -salt -in $1 -out $2 -pass file:./key.bin
+}
+
+
+osenc-decrypt () {
+  openssl rsautl -decrypt -inkey secret-rsa.pem -in key.bin.enc -out key.bin
+  openssl enc -d -aes256 -base64 -pbkdf2 -in $1 -out $2 -pass file:./key.bin
+}
+
+
+extract () {
+    if [ -f $1 ] ; then
+        case $1 in
+            *.tar.bz2)   tar xvjf $1     ;;
+            *.tar.gz)    tar xvzf $1     ;;
+            *.bz2)       bunzip2 $1      ;;
+            *.rar)       unrar x $1      ;;
+            *.gz)        gunzip $1       ;;
+            *.tar)       tar xvf $1      ;;
+            *.tbz2)      tar xvjf $1     ;;
+            *.tgz)       tar xvzf $1     ;;
+            *.zip)       unzip $1        ;;
+            *.Z)         uncompress $1   ;;
+            *.7z)        7z x $1         ;;
+            *)           echo "'$1' cannot be extracted via >extract<" ;;
+        esac
+    else
+        echo "'$1' is not a valid file!"
+    fi
+}
