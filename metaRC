@@ -79,10 +79,18 @@ derive () {
 }
 
 ecenc () {
-  openssl enc -aes256 -base64 -k $(base64 secret.bin) -e -in $1 -out $2
+  openssl enc -pbkdf2 -aes256 -base64 -k $(base64 secret.bin) -e -in $1 -out $2
 }
 
 ecdec () {
+  openssl enc -pbkdf2 -aes256 -base64 -k $(base64 secret.bin) -d -in $1 -out $2
+}
+
+oldecenc () {
+  openssl enc -aes256 -base64 -k $(base64 secret.bin) -e -in $1 -out $2
+}
+
+oldecdec () {
   openssl enc -aes256 -base64 -k $(base64 secret.bin) -d -in $1 -out $2
 }
 
@@ -101,16 +109,27 @@ osenc-enc-pass () {
   openssl rsautl -encrypt -inkey rsa.pub -pubin -in key.bin -out key.bin.enc
 }
 
-# osenc my-secretfile.txt mysecretfile.txt.asc
-osenc-file () { 
+oldosenc-file () { 
   openssl enc -aes256 -base64 -salt -in $1 -out $2 -pass file:./key.bin
+}
+
+oldosenc-decrypt () {
+  openssl rsautl -decrypt -inkey secret-rsa.pem -in key.bin.enc -out key.bin 
+  openssl enc -d -aes256 -base64 -in $1 -out $2 -pass file:./key.bin 
+}
+
+# osenc my-secretfile.txt mysecretfile.txt.asc
+osenc-file () {
+  openssl enc -aes256 -base64 -pbkdf2 -salt -in $1 -out $2 -pass file:./key.bin
 }
 
 # osenc-decrypt mysecretfile.txt.asc my-secretfile.txt
 osenc-decrypt () {
-  openssl rsautl -decrypt -inkey secret-rsa.pem -in key.bin.enc -out key.bin 
-  openssl enc -d -aes256 -base64 -in $1 -out $2 -pass file:./key.bin 
+  openssl rsautl -decrypt -inkey secret-rsa.pem -in key.bin.enc -out key.bin
+  openssl enc -d -aes256 -base64 -pbkdf2 -in $1 -out $2 -pass file:./key.bin
 }
+
+
 
 # usage of this openssl/libressl thing with the functions above involves both sides(people and/or computer) to do it correctly
 # pgp (gpg) public key encryption is a much better solution
