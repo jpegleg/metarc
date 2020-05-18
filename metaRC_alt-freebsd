@@ -52,11 +52,11 @@ derive () {
 }
 
 ecenc () {
-  openssl enc -aes256 -base64 -k $(base64 secret.bin) -e -in $1 -out $2
+  openssl enc -pbkdf2 -aes256 -base64 -k $(base64 secret.bin) -e -in $1 -out $2
 }
 
 ecdec () {
-  openssl enc -aes256 -base64 -k $(base64 secret.bin) -d -in $1 -out $2
+  openssl enc -pbkdf2 -aes256 -base64 -k $(base64 secret.bin) -d -in $1 -out $2
 }
 
 # rsa manual section with openssl
