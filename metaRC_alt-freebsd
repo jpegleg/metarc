@@ -35,16 +35,16 @@ alias ldapcert='openssl s_client -connect localhost:389 -starttls ldap -showcert
 
 
 getpin () {
-echo "enter site:";
-read hashsite &&
-openssl s_client -servername "$hashsite" -connect "$hashsite":443 | openssl x509 -pubkey -noout | openssl pkey -pubin -outform der | openssl dgst -sha256 -binary | openssl enc -base64;
+  echo "enter site:";
+  read hashsite &&
+  openssl s_client -servername "$hashsite" -connect "$hashsite":443 | openssl x509 -pubkey -noout | openssl pkey -pubin -outform der | openssl dgst -sha256 -binary | openssl enc -base64;
 }
 
 # ECC manual operations with openssl
 
 gensecp () {
-openssl ecparam -name secp384r1 -genkey -noout -out secp384r1.pem
-openssl ec -in secp384r1.pem -pubout -out secp384r1.pub
+  openssl ecparam -name secp384r1 -genkey -noout -out secp384r1.pem
+  openssl ec -in secp384r1.pem -pubout -out secp384r1.pub
 }
 
 derive () {
@@ -66,23 +66,19 @@ osenc-setup () {
   openssl rsa -in secret-rsa.pem -pubout -outform pem > rsa.pub
 }
 
-
 osenc-enc-pass () {
   openssl rand -base64 32 > key.bin
   openssl rsautl -encrypt -inkey rsa.pub -pubin -in key.bin -out key.bin.enc
 }
 
-
 osenc-file () {
   openssl enc -aes256 -base64 -pbkdf2 -salt -in $1 -out $2 -pass file:./key.bin
 }
-
 
 osenc-decrypt () {
   openssl rsautl -decrypt -inkey secret-rsa.pem -in key.bin.enc -out key.bin
   openssl enc -d -aes256 -base64 -pbkdf2 -in $1 -out $2 -pass file:./key.bin
 }
-
 
 extract () {
     if [ -f $1 ] ; then
