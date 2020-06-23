@@ -55,16 +55,16 @@ alias ldapcert='openssl s_client -connect localhost:389 -starttls ldap -showcert
 
 
 getpin () {
-echo "enter site:";
-read hashsite &&
-openssl s_client -servername "$hashsite" -connect "$hashsite":443 | openssl x509 -pubkey -noout | openssl pkey -pubin -outform der | openssl dgst -sha256 -binary | openssl enc -base64;
+  echo "enter site:";
+  read hashsite &&
+  openssl s_client -servername "$hashsite" -connect "$hashsite":443 | openssl x509 -pubkey -noout | openssl pkey -pubin -outform der | openssl dgst -sha256 -binary | openssl enc -base64;
 }
 
 # ECC manual operations with openssl
 
 gensecp () {
-openssl ecparam -name secp384r1 -genkey -noout -out secp384r1.pem
-openssl ec -in secp384r1.pem -pubout -out secp384r1.pub
+  openssl ecparam -name secp384r1 -genkey -noout -out secp384r1.pem
+  openssl ec -in secp384r1.pem -pubout -out secp384r1.pub
 }
 
 derive () {
@@ -105,48 +105,48 @@ osenc-decrypt () {
 
 
 ufw-root-ssh-ban () {
-for x in $(grep Failed.password.for.root /var/log/auth.log | awk '{print $11}' | sort -u ); do
-  ufw insert 1 deny from $x to any port 22;
-done
-ufw reload
+  for x in $(grep Failed.password.for.root /var/log/auth.log | awk '{print $11}' | sort -u ); do
+    ufw insert 1 deny from $x to any port 22;
+  done
+  ufw reload
 }
 
 ufw-all-ssh-ban () {
-for x in $(grep Failed.password.for /var/log/auth.log | awk '{print $11}' | sort -u ); do
-  ufw insert 1 deny from $x to any port 22;
-done
-ufw reload
+  for x in $(grep Failed.password.for /var/log/auth.log | awk '{print $11}' | sort -u ); do
+    ufw insert 1 deny from $x to any port 22;
+  done
+  ufw reload
 }
 
 
 netest () {
-    val=$(which ss)
-    if [ -z $val ]; then
-      ss -an | grep -v u_str | grep EST
-    else
-      netstat -tan | grep EST
-    fi
+  val=$(which ss)
+  if [ -z $val ]; then
+    ss -an | grep -v u_str | grep EST
+  else
+    netstat -tan | grep EST
+  fi
 }
 
 extract () {
-    if [ -f $1 ] ; then
-        case $1 in
-            *.tar.bz2)   tar xvjf $1     ;;
-            *.tar.gz)    tar xvzf $1     ;;
-            *.bz2)       bunzip2 $1      ;;
-            *.rar)       unrar x $1      ;;
-            *.gz)        gunzip $1       ;;
-            *.tar)       tar xvf $1      ;;
-            *.tbz2)      tar xvjf $1     ;;
-            *.tgz)       tar xvzf $1     ;;
-            *.zip)       unzip $1        ;;
-            *.Z)         uncompress $1   ;;
-            *.7z)        7z x $1         ;;
-            *)           echo "'$1' cannot be extracted via >extract<" ;;
-        esac
-    else
-        echo "'$1' is not a valid file!"
-    fi
+  if [ -f $1 ] ; then
+      case $1 in
+          *.tar.bz2)   tar xvjf $1     ;;
+          *.tar.gz)    tar xvzf $1     ;;
+          *.bz2)       bunzip2 $1      ;;
+          *.rar)       unrar x $1      ;;
+          *.gz)        gunzip $1       ;;
+          *.tar)       tar xvf $1      ;;
+          *.tbz2)      tar xvjf $1     ;;
+          *.tgz)       tar xvzf $1     ;;
+          *.zip)       unzip $1        ;;
+          *.Z)         uncompress $1   ;;
+          *.7z)        7z x $1         ;;
+          *)           echo "'$1' cannot be extracted via >extract<" ;;
+      esac
+  else
+      echo "'$1' is not a valid file!"
+  fi
 }
 
 tst () {
@@ -168,46 +168,52 @@ done
 }
 
 repeat () {
-    local i max
-    max=$1; shift;
-    for ((i=1; i <= max ; i++)); do  # --> C-like syntax
-        eval "$@";
-    done
+  local i max
+  max=$1; 
+  shift;
+  for ((i=1; i <= max ; i++)); do
+    eval "$@";
+  done
 }
 
 lsnp () { 
-ls -l $1 | awk '{k=0;for(i=0;i<=8;i++)k+=((substr($1,i+2,1)~/[rwx]/) *2^(8-i));if(k)printf("%0o ",k);print}'; 
+  ls -l $1 | awk '{k=0;for(i=0;i<=8;i++)k+=((substr($1,i+2,1)~/[rwx]/) *2^(8-i));if(k)printf("%0o ",k);print}'; 
 }
 
 statl () {
-stat -c '%a %n' 
+  stat -c '%a %n' 
 }
 
 stripsp () {
-tr -d '\040\011\012\015'
+  tr -d '\040\011\012\015'
 }
+
 stripbl () {
-tr -d '[blank]'
+  tr -d '[blank]'
 }
+
 rmblank () {
-sed '/^\s*$/d'
+  sed '/^\s*$/d'
 }
+
 rmblankw () {
-sed -i '/^\s*$/d'
+  sed -i '/^\s*$/d'
 }
 
 scrub () {
-sed 's/[:graph:]/∎//g'
+  sed 's/[:graph:]/∎//g'
 }
 
 scrubnumbers () {
-sed 's/[0-9]/∎/g'
+  sed 's/[0-9]/∎/g'
 }
+
 alias scbn="scrubnumbers"
 
 scrubletters () {
-sed 's/[a-Z]/∎/g'
+  sed 's/[a-Z]/∎/g'
 }
+
 alias sblts="scrubletters"
 
 bigreport () {
