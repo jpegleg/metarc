@@ -432,9 +432,11 @@ libgen () {
 byteconv() {
   python -c "import pprint;pprint.pprint(zip(('Byte', 'KByte', 'MByte', 'GByte', 'TByte'), (1 << 10*i for i in xrange(5))))"
 }
+
 sv2json() {
   python -c "import csv,json;print json.dumps(list(csv.reader(open('csv_file.csv'))))"
 }
+
 dhex() {
   export HEXIN=$1 ; python -c "print ''.join(chr(int(''.join(i), 16)) for i in zip(*[iter('$HEXIN')]*2))"; 
 }
