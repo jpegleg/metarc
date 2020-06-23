@@ -218,15 +218,15 @@ tst () {
 }
 
 dsort () {
-for y in 2020 2019 2018 2017 2016 2015 2014 2013 2012 2011 2010; do
-  echo "Year $y";
-  for x in Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec; do
-    echo "Setting Month to $x";
-    passalong=$x-$y
-    tst $passalong
+  for y in 2020 2019 2018 2017 2016 2015 2014 2013 2012 2011 2010; do
+    echo "Year $y";
+    for x in Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec; do
+      echo "Setting Month to $x";
+      passalong=$x-$y
+      tst $passalong
+    done
+    echo "Completed year $y..."
   done
-  echo "Completed year $y..."
-done
 }
 
 lsnp() { 
@@ -261,17 +261,15 @@ remindperms () {
 }
 
 colorz () {
-for fgbg in 38 48 ; do # Foreground / Background
-  for color in {0..255} ; do # Colors
-      # Display the color
-      printf "\e[${fgbg};5;%sm  %3s  \e[0m" $color $color
-      # Display 6 colors per lines
-      if [ $((($color + 1) % 6)) == 4 ] ; then
-          echo # New line
-      fi
+  for fgbg in 38 48 ; do
+    for color in {0..255} ; do
+        printf "\e[${fgbg};5;%sm  %3s  \e[0m" $color $color
+        if [ $((($color + 1) % 6)) == 4 ] ; then
+          echo
+        fi
+    done
+    echo
   done
-  echo # New line
-done
 }
 
 stripsp () {
