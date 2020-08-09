@@ -71,11 +71,11 @@ derive () {
 }
 
 ecenc () {
-  openssl enc -aes256 -base64 -k $(base64 secret.bin) -e -in $1 -out $2
+  openssl enc -pbkdf2 -aes256 -base64 -k $(base64 secret.bin) -e -in $1 -out $2
 }
 
 ecdec () {
-  openssl enc -aes256 -base64 -k $(base64 secret.bin) -d -in $1 -out $2
+  openssl enc -pbkdf2 -aes256 -base64 -k $(base64 secret.bin) -d -in $1 -out $2
 }
 
 # rsa manual section with openssl
@@ -226,9 +226,9 @@ bigreport () {
 
   df -h > ~/df.$(hostname).$(date +'%m%d%y:%H:%M%S').out
   lsof > ~/lsof.$(hostname).$(date +'%m%d%y:%H:%M%S').out
-  netstat -tan > ~/netstat.$(hostname).$(date +'%m%d%y:%H:%M%S').out
+  netstat -a > ~/netstat.$(hostname).$(date +'%m%d%y:%H:%M%S').out || ss -tanu) ~/ss.$(hostname).$(date +'%m%d%y:%H:%M%S').out
   free -m > ~/free.$(hostname).$(date +'%m%d%y:%H:%M%S').out
-  facter > ~/facter.$(hostname).$(date +'%m%d%y:%H:%M%S').out
+  facter > ~/facter.$(hostname).$(date +'%m%d%y:%H:%M%S').out || uname -a > ~/uname.$(hostname).$(date +'%m%d%y:%H:%M%S').out
   w > ~/users.$(hostname).$(date +'%m%d%y:%H:%M%S').out
   last > ~/last.$(hostname).$(date +'%m%d%y:%H:%M%S').out
 }
