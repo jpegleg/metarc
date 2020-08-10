@@ -68,6 +68,8 @@ alias grsa='openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048'
 alias grsas='openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365'
 alias rand64='openssl rand -base64 32' # redirect to a file
 alias ldapcert='openssl s_client -connect localhost:389 -starttls ldap -showcerts'
+alias k='microk8s.kubectl'
+
 
 # ECC manual operations with openssl
 
@@ -177,6 +179,10 @@ ufw-all-ssh-ban () {
     ufw insert 1 deny from $x to any port 22;
   done
   ufw reload
+}
+
+killk () {
+  for x in $(k get all | awk '{print $1}' | grep -v NAME | grep -v pod); do k delete $x; done
 }
 
 ext-ip () { 
