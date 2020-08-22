@@ -86,6 +86,8 @@ derive () {
   openssl pkeyutl -derive -inkey secp384r1.pem -peerkey peerpub.pem -out secret.bin
 }
 
+# AES256 with a keyfile
+
 ecenc () {
   openssl enc -pbkdf2 -aes256 -base64 -k $(base64 secret.bin) -e -in $1 -out $2
 }
