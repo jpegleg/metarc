@@ -80,17 +80,6 @@ osenc-decrypt () {
   openssl enc -d -aes256 -base64 -pbkdf2 -in $1 -out $2 -pass file:./key.bin
 }
 
-azkar () { 
-  for i in 1 2 3 4 5 6 7 8 9 10 11 12 13; do 
-    echo "unit $i $(cat /dev/urandom | xxd -p | fold -12 | head -n1)"; 
-  done; 
-  for g in 1 2 3; do
-    echo "mod $g $(cat /dev/urandom | xxd -p | fold -4 | sed 's/1/%/g' | sed 's/2/+/g' | sed 's/3/./g' | sed 's/4/$/g' | sed 's/5/B/g' | sed 's/6/@/g' | sed 's/7/@/g' | sed 's/8/Q/g' | head -n1)";
-  done 
-  for s in 1 2 3;
-    do echo "header-base $s $(cat /dev/urandom | base64 | fold -12 | sed 's/1/%/g' | sed 's/2/+/g' | sed 's/3/./g' | sed 's/4/$/g' | sed 's/5/B/g' | sed 's/6/@/g' | sed 's/7/@/g' | sed 's/8/Q/g' | head -n1)";
-  done
-}
 
 extract () {
   if [ -f $1 ] ; then
