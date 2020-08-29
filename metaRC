@@ -321,6 +321,15 @@ linesx () {
   printf '%*s' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
 }
 
+badgers () {
+  val=$(tput cols)
+  x=1
+  while [ $x -le $val ]; do
+    echo -n 🦡
+    x=$((x+1));
+  done
+}
+
 stripsp () {
   tr -d '\040\011\012\015'
 }
