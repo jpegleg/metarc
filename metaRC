@@ -300,6 +300,27 @@ colorz () {
   done
 }
 
+rainbow () {
+  for color in 196 208 226 118 21 54 128 ; do
+    printf "\e[48;5;%sm%*s" $color "${COLUMNS:-$(tput cols)}" '' | tr ' ' ' '
+  done
+}
+
+loader () {
+  PID=$!
+  i=1
+  sp="/-\|"
+  echo -n ' '
+  while [ -d /proc/$PID ]
+  do
+    printf "\b${sp:i++%${#sp}:1}"
+  done
+}
+
+linesx () {
+  printf '%*s' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
+}
+
 stripsp () {
   tr -d '\040\011\012\015'
 }
@@ -468,3 +489,9 @@ sv2json() {
 dhex() {
   export HEXIN=$1 ; python -c "print ''.join(chr(int(''.join(i), 16)) for i in zip(*[iter('$HEXIN')]*2))"; 
 }
+
+
+# Start off your session with a rainbow
+
+rainbow
+
