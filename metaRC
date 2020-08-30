@@ -499,8 +499,3 @@ dhex() {
   export HEXIN=$1 ; python -c "print ''.join(chr(int(''.join(i), 16)) for i in zip(*[iter('$HEXIN')]*2))"; 
 }
 
-
-# Start off your session with a rainbow
-
-rainbow
-
