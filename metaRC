@@ -48,30 +48,35 @@ alias shredhard='shred -v -n 25 -u -z'
 # openssl section
 
 alias speedtest='openssl speed'
-alias extractrsapub='openssl rsa -in rsa.pem -pubout > rsa.pub'
-alias extractpubfromcert='openssl x509 -in extract.crt  -noout -pubkey > cert.pub'
+
 alias ecckey='openssl ecparam -out ecc.key -name prime256v1 -genkey'
+
+alias extractrsapub='openssl rsa -in rsa.pem -pubout > rsa.pub'
+alias extractpubfromcert='openssl x509 -in extract.crt -noout -pubkey > cert.pub'
 alias rsa4096='openssl genrsa 4096'
 alias rsa2048='openssl genrsa 2048'
 
-alias rsasign='openssl rsautl -sign -in input.txt -inkey rsa.pem -out output.sign'
-alias rsaverify='openssl rsautl -verify -in output.sign -inkey rsa.pub -pubin'
-
 alias rsasign='openssl dgst -sign rsa.pem -keyform PEM -sha256 -out $1.signed -binary $1 || openssl rsautl -sign -in $1 -inkey rsa.pem -out $1.signed'
 alias rsaverify='openssl dgst -verify rsa.pub -keyform PEM -sha256 -signature signature.in -binary $1 || openssl rsautl -verify -in signature.in -inkey rsa.pub -pubin'
+
 alias newcsr='openssl req -out CSR.csr -new -key ' # pass the key name after the alias like: newcsr mykey.key
 alias checkcsr='openssl req -text -noout -verify -in' # pass the csr name like: checkcsr CSR.csr
 alias checkkey='openssl rsa -check -in' # pass the key name like: checkkey mykey.key
 alias checkcrt='openssl x509 -text -noout -in' # pass the cert name like: checkcrt mycert.crt
-alias gencacert='openssl req -new -x509 -key ./ca.key -out ca.crt'
+alias gencacert='openssl req -new -x509 -key ./ca.key -out ca.crt -days 3653'
 alias signcsr='openssl x509 -req -days 360 -in CSR.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out example.crt -sha256'
 alias signv3='openssl x509 -req -days 365 -in CSR.csr -extfile v3.ext -CA ca.crt -CAkey ca.key -CAcreateserial -out example.crt -sha256 -extensions 'v3_req''
+
 alias gendh2048='openssl dhparam -out /etc/dhparam-2048 2048'
 alias gendh4096='openssl dhparam -out /etc/dhparam-4096 4096'
+
 alias grsa='openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048'
 alias grsas='openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365'
+
 alias rand64='openssl rand -base64 32' # redirect to a file
+
 alias ldapcert='openssl s_client -connect localhost:389 -starttls ldap -showcerts'
+
 alias k='microk8s.kubectl'
 
 
@@ -97,11 +102,11 @@ ecdec () {
 }
 
 oldecenc () {
-  openssl enc -aes256 -base64 -k $(base64 secret.bin) -e -in $1 -out $2
+  openssl enc -aes256 -base64 -k $(base64 secret.bin) -e -in $1 -out $2 #old way, use the ecenc and ecdec instead when you can
 }
 
 oldecdec () {
-  openssl enc -aes256 -base64 -k $(base64 secret.bin) -d -in $1 -out $2
+  openssl enc -aes256 -base64 -k $(base64 secret.bin) -d -in $1 -out $2 #old way, use the ecenc and ecdec instead when you can
 }
 
 
@@ -119,13 +124,9 @@ osenc-enc-pass () {
   openssl rsautl -encrypt -inkey rsa.pub -pubin -in key.bin -out key.bin.enc
 }
 
-oldosenc-file () { 
-  openssl enc -aes256 -base64 -salt -in $1 -out $2 -pass file:./key.bin
-}
-
 oldosenc-decrypt () {
   openssl rsautl -decrypt -inkey secret-rsa.pem -in key.bin.enc -out key.bin 
-  openssl enc -d -aes256 -base64 -in $1 -out $2 -pass file:./key.bin 
+  openssl enc -d -aes256 -base64 -in $1 -out $2 -pass file:./key.bin  #old way, use the ecenc and ecdec instead when you can, -pbkdf2
 }
 
 # osenc my-secretfile.txt mysecretfile.txt.asc
