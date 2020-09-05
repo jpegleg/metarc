@@ -78,6 +78,7 @@ alias rand64='openssl rand -base64 32' # redirect to a file
 alias ldapcert='openssl s_client -connect localhost:389 -starttls ldap -showcerts'
 
 alias k='microk8s.kubectl'
+alias k3='kubectl'
 
 
 # ECC manual operations with openssl
