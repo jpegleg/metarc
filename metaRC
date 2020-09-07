@@ -323,6 +323,24 @@ linesx () {
   printf '%*s' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
 }
 
+redoct () {
+  val=$(tput cols);
+  x=1;
+  while [ $x -le $val ]; do
+    echo -en "\e[31m✸\e[0m";
+    x=$((x+1));
+  done;
+}
+
+greenline () {
+  val=$(tput cols);
+  x=1;
+  while [ $x -le $val ]; do
+    echo -en "\e[32m■\e[0m";
+    x=$((x+1));
+  done;
+}
+
 badgers () {
   val=$(tput cols)
   x=1
