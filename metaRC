@@ -519,3 +519,7 @@ dhex() {
   export HEXIN=$1 ; python -c "print ''.join(chr(int(''.join(i), 16)) for i in zip(*[iter('$HEXIN')]*2))"; 
 }
 
+yaml2json() {
+  python -c 'import yaml,pprint;pprint.pprint(yaml.load(open("convert.yml").read()))'
+}
+
