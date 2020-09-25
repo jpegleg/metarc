@@ -60,7 +60,7 @@ alias rsa2048='openssl genrsa 2048'
 rsasign () {
   openssl dgst -sign $3 -keyform PEM -sha256 -out $2 -binary $1 
 }
-rsasign2 )_ {
+rsasign2 () {
   openssl rsautl -sign -in $1 -inkey $3 -out $2
 }
 rsaverify () {
