@@ -21,7 +21,7 @@ alias shredhard='shred -v -n 25 -u -z'
 # openssl section
 
 alias speedtest='openssl speed'
-alias genmac='openssl rand -hex 6 | sed 's/\(..\)/\1:/g; s/.$//'
+alias genmac="openssl rand -hex 6 | sed 's/\(..\)/\1:/g; s/.$//'"
 alias ecckey='openssl ecparam -out ecc.key -name prime256v1 -genkey'
 alias rsa4096='openssl genrsa 4096'
 alias rsa2048='openssl genrsa 2048'
