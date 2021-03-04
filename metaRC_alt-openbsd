@@ -46,7 +46,7 @@ alias hashcheck='openssl x509 -noout -modulus -in certificate.crt | openssl md5;
 alias checkpk12p='openssl pkcs12 -info -in'
 alias requestsign='openssl req -newkey rsa:2048 -sha256 -nodes -out servercert.csr -outform PEM'
 alias ldapcert='openssl s_client -connect localhost:389 -starttls ldap -showcerts'
-
+alias gensshkey='ssh-keygen -t ed25519'
 
 getpin () {
   echo "enter site:";
