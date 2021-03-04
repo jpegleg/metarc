@@ -22,7 +22,7 @@ alias cfger='cd /usr/local/cfgs'
 alias brutezip='sudo gzip $1/*log'
 alias bkoff='bigreport && cp ~/*out /var/log ; tar czvf backup-$(hostname)-$(date +'%m%d%y%H%M%S'.tgz /var/log && scp backup*.tgz $(cat /tmp/user)@$(cat /tmp/backup):/tmp/ && shutdown -r now'
 alias shredhard='shred -v -n 25 -u -z'
-alias gensshkey="ssh-keygen -t ed25519"
+alias gensshkey='ssh-keygen -t ed25519'
 
 # openssl section
 
