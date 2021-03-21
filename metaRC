@@ -218,6 +218,15 @@ netest () {
   fi
 }
 
+# use ssss implementation of shamir's secret sharing algorithm
+# pass an argument as a password to encrypt all 2000 of the shares
+# then the Trusted Distrubuter and Witness can send out one share
+# per person or org, in this case requiring 2 shares to access
+# the shared secret. Also see https://github.com/jpegleg/bash-jwt
+ssss-gen () {
+  echo "$(cat /dev/urandom | head -n2 | xxd -p | cut -c2-66 | cut -d' ' -f1)" | ssss-split -t 2 -n 2000 -w jwt | gpg --symmetric  --cipher=aes256 --always-trust --batch --armor --passphrase $1 --yes > .shamir_shares_$(date +%Y%m%d%H%M%S).dat
+}
+
 # generate strings for parts of secrets
 # the seds in here are just a compat/complexity layer... you can take them out or switch them up if you prefer etc
 azkar () { 
