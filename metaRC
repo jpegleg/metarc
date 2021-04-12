@@ -186,6 +186,14 @@ osenc-decrypt () {
 #                                      --->  -> 
 ########################################          ->
 
+backupmbr () {
+  dd if=/dev/sda of=/root/mbr.backup bs=512 count=1
+}
+
+restorembr () {
+  ls /root/mbr.backup || exit 1
+  dd if=/root/mbr.backup of=/dev/sda bs=512 count=1
+}
 
 ufw-root-ssh-ban () {
   for x in $(grep Failed.password.for.root /var/log/auth.log | awk '{print $11}' | sort -u ); do
