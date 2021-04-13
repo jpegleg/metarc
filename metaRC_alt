@@ -1,6 +1,5 @@
 # Toolbox .bashrc
-alias psg='ps aux | grep "$1"'
-alias bck='cp $1 $1.$(date +"%m%d%y").bak && cp /dev/null $1 && gzip $1.$(date +"%m%d%y").bak'
+
 alias lsl='ls -larth --color=auto'
 alias ls='ls --color=auto'
 alias pscpu='ps auxf | sort -nr -k 3'
@@ -119,7 +118,14 @@ ufw-all-ssh-ban () {
   ufw reload
 }
 
+pasg () {
+  ps aux | grep "$1"
+}
 
+bck () {
+  cp $1 $1.$(date +"%m%d%y").bak && cp /dev/null $1 && gzip $1.$(date +"%m%d%y").bak
+}
+  
 netest () {
   val=$(which ss)
   if [ -z $val ]; then
