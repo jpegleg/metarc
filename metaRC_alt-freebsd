@@ -1,4 +1,4 @@
-alias psg='ps aux | grep "$1"'
+
 alias lsl='ls -larth --color=auto'
 alias ls='ls --color=auto'
 alias pscpu='ps auxf | sort -nr -k 3'
@@ -81,6 +81,13 @@ osenc-decrypt () {
   openssl enc -d -aes256 -base64 -pbkdf2 -in $1 -out $2 -pass file:./key.bin
 }
 
+pasg () {
+  ps aux | grep "$1"
+}
+
+bck () {
+  cp $1 $1.$(date +"%m%d%y").bak && cp /dev/null $1 && gzip $1.$(date +"%m%d%y").bak
+}
 
 extract () {
   if [ -f $1 ] ; then
