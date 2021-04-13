@@ -1,6 +1,5 @@
 # Toolbox .bashrc
-alias psg='ps aux | grep "$1"'
-alias bck='cp $1 $1.$(date +"%m%d%y").bak && cp /dev/null $1 && gzip $1.$(date +"%m%d%y").bak'
+
 alias pscpu='ps auxf | sort -nr -k 3'
 alias pscpu10='ps auxf | sort -nr -k 3 | head -10'
 alias l='ls -larth'
@@ -97,6 +96,13 @@ osenc-decrypt () {
   openssl enc -d -aes256 -base64 -pbkdf2 -in $1 -out $2 -pass file:./key.bin 
 }
 
+pasg () {
+  ps aux | grep "$1"
+}
+
+bck () {
+  cp $1 $1.$(date +"%m%d%y").bak && cp /dev/null $1 && gzip $1.$(date +"%m%d%y").bak
+}
 
 netest () {
     val=$(which ss)
