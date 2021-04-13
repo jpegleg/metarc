@@ -19,7 +19,6 @@ HISTTIMEFORMAT=$(date +%Y%m%d-%H%M%S--)
 SVN_EDITOR=vim
 
 # Toolbox .bashrc
-alias psg='ps aux | grep "$1"'
 alias bck='cp $1 $1.$(date +"%m%d%y").bak && cp /dev/null $1 && gzip $1.$(date +"%m%d%y").bak'
 alias lsl='ls -larth --color=auto'
 alias ls='ls --color=auto'
@@ -185,6 +184,10 @@ osenc-decrypt () {
 #                                   ->                ->
 #                                      --->  -> 
 ########################################          ->
+
+pasg () {
+  ps aux | grep "$1"
+}
 
 backupmbr () {
   dd if=/dev/sda of=/root/mbr.backup bs=512 count=1
