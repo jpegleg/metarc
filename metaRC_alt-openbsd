@@ -101,7 +101,7 @@ pasg () {
 }
 
 bck () {
-  cp $1 $1.$(date +"%m%d%y").bak && cp /dev/null $1 && gzip $1.$(date +"%m%d%y").bak
+  cp $1 $1.$(date +"%m%d%y").bak && cp /dev/null $1 && gzip -9 $1.$(date +"%m%d%y").bak &
 }
 
 netest () {
