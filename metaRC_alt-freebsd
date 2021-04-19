@@ -1,8 +1,7 @@
 
 alias lsl='ls -larth --color=auto'
 alias ls='ls --color=auto'
-alias pscpu='ps auxf | sort -nr -k 3'
-alias pscpu10='ps auxf | sort -nr -k 3 | head -10'
+alias pss='ps awwwTfux'
 alias l='ls -larth'
 
 alias speedtest='openssl speed'
