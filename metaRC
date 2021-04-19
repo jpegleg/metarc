@@ -22,8 +22,9 @@ SVN_EDITOR=vim
 
 alias lsl='ls -larth --color=auto'
 alias ls='ls --color=auto'
-alias pscpu='ps auxf | sort -nr -k 3'
-alias pscpu10='ps auxf | sort -nr -k 3 | head -10'
+alias pss='ps awwwTfux'
+alias pscpu='ps auxwww | sort -nr -k 3 | grep -v TIME.COMMAND'
+alias pscpu10='ps auxwww | sort -nr -k 3 | grep -v TIME.COMMAND' | head -10'
 alias l='ls -larth'
 alias lsofof='lsof | grep $1'
 alias netdns='ss -atxr'
