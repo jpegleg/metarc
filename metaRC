@@ -186,6 +186,10 @@ osenc-decrypt () {
 #                                      --->  -> 
 ########################################          ->
 
+singlek8s () {
+  kubectl taint nodes --all node-role.kubernetes.io/master-
+}
+
 pasg () {
   ps aux | grep "$1"
 }
