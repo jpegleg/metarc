@@ -123,6 +123,17 @@ oldecdec () {
   openssl enc -aes256 -base64 -k $(base64 secret.bin) -d -in $1 -out $2 #old way, use the ecenc and ecdec instead when you can
 }
 
+# create a secp384r1 private key straight into an environment variable
+
+expsecp () {
+  export P384TMP="$(openssl ecparam -name secp384r1 -genkey -noout)"
+}
+
+# derive straight to memory from files on disk
+
+expsecppub () {
+  export DREDGE="$(openssl pkeyutl -derive -inkey secp384r1.pem -peerkey peerpub.pem -out)"
+}
 
 # RSA manual operations with openssl
 
