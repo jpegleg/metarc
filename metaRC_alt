@@ -105,6 +105,9 @@ osenc-decrypt () {
   openssl enc -d -aes256 -base64 -pbkdf2 -in $1 -out $2 -pass file:./key.bin 
 }
 
+fpenc () {
+   gpg --symmetric  --cipher=aes256 --always-trust --batch --armor --passphrase $1 --yes
+}
 
 ufw-root-ssh-ban () {
   for x in $(grep Failed.password.for.root /var/log/auth.log | awk '{print $11}' | sort -u ); do
