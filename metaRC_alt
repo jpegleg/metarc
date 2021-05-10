@@ -1,5 +1,6 @@
 # Toolbox .bashrc
 
+alias rvst='set | less'
 alias lsl='ls -larth --color=auto'
 alias ls='ls --color=auto'
 alias pss='ps awwwTfux'
