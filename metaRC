@@ -198,6 +198,10 @@ osenc-decrypt () {
 #                                      --->  -> 
 ########################################          ->
 
+fpenc () {
+   gpg --symmetric  --cipher=aes256 --always-trust --batch --armor --passphrase $1 --yes
+}
+
 singlek8s () {
   kubectl taint nodes --all node-role.kubernetes.io/master-
 }
