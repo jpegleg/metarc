@@ -4,6 +4,7 @@ alias ls='ls --color=auto'
 alias pss='ps awwwTfux'
 alias l='ls -larth'
 
+alias reviewset='set | less'
 alias speedtest='openssl speed'
 alias genmac="openssl rand -hex 6 | sed 's/\(..\)/\1:/g; s/.$//'"
 alias extractrsapub='openssl rsa -in rsa-key.pem -pubout > rsa.pub'
