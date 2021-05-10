@@ -1,5 +1,6 @@
 # Toolbox .bashrc
 
+alias reviewset='set | less'
 alias pss='ps awwwTfux'
 alias pscpu='ps auxwww | sort -nr -k 3 | grep -v TIME.COMMAND'
 alias pscpu10='ps auxwww | sort -nr -k 3 | grep -v TIME.COMMAND | head -10'
