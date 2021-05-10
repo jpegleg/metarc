@@ -129,10 +129,10 @@ expsecp () {
   export P384TMP="$(openssl ecparam -name secp384r1 -genkey -noout)"
 }
 
-# derive straight to memory from files on disk
+# derive straight to memory from files on disk, keep hex encoded for transparent because the input is binary blob
 
 expsecppub () {
-  export DREDGE="$(openssl pkeyutl -derive -inkey secp384r1.pem -peerkey peerpub.pem -out)"
+  export DREDGE="$(openssl pkeyutl -derive -inkey secp384r1.pem -peerkey peerpub.pem -out | xxd -p)"
 }
 
 # RSA manual operations with openssl
