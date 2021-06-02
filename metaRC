@@ -277,6 +277,47 @@ azkar () {
   done
 }
 
+# Delete all keys from the (local) redis!
+delredis () {
+  echo "keys *" | redis-cli | cut -d' ' -f2 | while read line; do
+    echo "Deleting $line";
+    echo "del $line" | redis-cli;
+  done
+}
+
+# Dump all redis keys to a flat file.
+redisflat () {
+  stamp=$(date +%Y%m%d%H%M%S)
+  touch redis_"$stamp"_.flat
+  echo "keys *" | redis-cli | cut -d' ' -f2 | while read line; do
+    lineval="$(echo "get $line" | redis-cli | cut -d' ' -f2)"
+    echo -e "$(date +%Y%m%d%H%M%S) \e[1;32mloading redis to flatfile...\e[0m";
+    echo "|$line|$lineval|" >> redis_"$stamp"_.flat
+  done
+}
+
+# Dump all redis keys to a compressed flat file.
+redisfgz () {
+  stamp=$(date +%Y%m%d%H%M%S)
+  touch redis_"$stamp"_.flat
+  echo "keys *" | redis-cli | cut -d' ' -f2 | while read line; do
+    lineval="$(echo "get $line" | redis-cli | cut -d' ' -f2)"
+    echo -e "$(date +%Y%m%d%H%M%S) \e[1;32mloading redis to flatfile...\e[0m";
+    echo "|$line|$lineval|" >> redis_"$stamp"_.flat 
+  done
+  gzip -9 redis_"$stamp"_.flat
+}
+
+# Load up redis from flat file
+flatload () {
+  cat $1 | while read line; do 
+    echo "loading $line into \e[0;32redis\e[0m"
+    key="$(echo $line | cut -d'|' -f2)"
+    value="$(echo $line | cut -d'|' -f3)"
+    echo "set $key $value" | redis-cli 
+  done
+}
+
 extract () {
   if [ -f $1 ] ; then
       case $1 in
