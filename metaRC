@@ -308,7 +308,7 @@ redisfgz () {
   gzip -9 redis_"$stamp"_.flat
 }
 
-# Load up redis from flat file
+# Load up redis from flat file.
 flatload () {
   cat $1 | while read line; do 
     echo "loading $line into \e[0;32redis\e[0m"
