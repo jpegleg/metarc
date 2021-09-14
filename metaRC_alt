@@ -1,6 +1,6 @@
 # Toolbox .bashrc
 
-alias alln='ss -tulpan'
+alias alln='ss -tulpan | grep LISTEN'
 alias rvst='set | less'
 alias lsl='ls -larth --color=auto'
 alias ls='ls --color=auto'
