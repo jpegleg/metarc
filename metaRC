@@ -20,6 +20,7 @@ SVN_EDITOR=vim
 
 # Toolbox .bashrc
 
+alias alln='ss -tulpan'
 alias reviewset='set | less'
 alias lsl='ls -larth --color=auto'
 alias ls='ls --color=auto'
