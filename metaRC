@@ -61,7 +61,7 @@ alias rsa4096='openssl genrsa 4096'
 alias rsa2048='openssl genrsa 2048'
 
 # Two different rsa signing methods, the first prints Verified OK, the second prints the contents.
-# Note that the dgst signing can use EC keys as well.
+# Note that the dgst signing can use EC keys as well. 
 rsasign () {
   openssl dgst -sign $3 -keyform PEM -sha256 -out $2 -binary $1 
 }
@@ -73,6 +73,10 @@ rsaverify () {
 }
 rsaverify2 () {
   openssl rsautl -verify -in $1 -inkey $2 -pubin
+}
+# Here is an example using the secp384r1.pem we generate with gensecp function to do EC file signing.
+384s () {
+  openssl dgst -sha256 -sign secp384r1.pem "$1" > "$2"
 }
 
 alias newcsr='openssl req -out CSR.csr -new -key ' # pass the key name after the alias like: newcsr mykey.key
