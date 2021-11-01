@@ -60,7 +60,8 @@ alias extractpubfromcert='openssl x509 -in extract.crt -noout -pubkey > cert.pub
 alias rsa4096='openssl genrsa 4096'
 alias rsa2048='openssl genrsa 2048'
 
-# two different rsa signing methods, the first prints Verified OK, the second prints the contents
+# Two different rsa signing methods, the first prints Verified OK, the second prints the contents.
+# Note that the dgst signing can use EC keys as well.
 rsasign () {
   openssl dgst -sign $3 -keyform PEM -sha256 -out $2 -binary $1 
 }
