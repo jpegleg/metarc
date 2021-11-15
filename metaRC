@@ -49,6 +49,10 @@ alias chrm='chromium 2>> chromium.$(date +%m%d%y-%H_%S).log'
 alias shredhard='shred -v -n 25 -u -z'
 alias gensshkey='ssh-keygen -t ed25519'
 
+# kernel module related
+alias kernmodules="find /lib/modules/$(uname -r) -type f -name '*.ko*'"
+alias loadmodule="/sbin/modprobe -r -a -i $1"
+
 # openssl section
 alias genmac="openssl rand -hex 6 | sed 's/\(..\)/\1:/g; s/.$//'"
 alias speedtest='openssl speed'
