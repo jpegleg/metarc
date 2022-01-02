@@ -43,6 +43,7 @@ alias natable='iptables -v --numeric --table nat --list'
 alias sysnet='iptables -v --numeric --table nat --list KUBE-SERVICES'
 alias ndport-'iptables -v --numeric --table nat --list KUBE-NODEPORTS'
 alias syscfgmp='kubectl get configmap -n kube-system kube-proxy -o yaml'
+alias allcfgmp='kubectl get configmap -o yaml'
 alias endpts='kubectl get endpoints kubernetes -o wide'
 
 # calicoctl alias and functions section
