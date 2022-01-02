@@ -18,6 +18,63 @@ HISTTIMEFORMAT=$(date +%Y%m%d-%H%M%S--)
 
 SVN_EDITOR=vim
 
+# k8s alias and functions section
+
+setpod () {
+  export TARGET_POD=$(kubectl get pods -n $1 -l app=$2 -o name)
+}
+followpod () {
+  kubectl logs -n $1 -l app=$2 --follow
+}
+kubeproxyon () {
+  kubectl patch ds -n kube-system kube-proxy --type merge -p '{"spec":{"template":{"spec":{"nodeSelector":{"non-calico": null}}}}}'
+}
+iptableson () {
+  kubectl patch installation.operator.tigera.io default --type merge -p '{"spec":{"calicoNetwork":{"linuxDataplane":"Iptables"}}}'
+}
+
+alias m8='microk8s.kubectl'
+alias k3='kubectl'
+alias k='kubectl'
+alias podbash='kubectl exec -it -n yaobank $TARGET_POD /bin/bash'
+alias descpod='kubectl describe $TARGET_POD'
+alias descall='kubectl describe all -A'
+alias natable='iptables -v --numeric --table nat --list'
+alias sysnet='iptables -v --numeric --table nat --list KUBE-SERVICES'
+alias ndport-'iptables -v --numeric --table nat --list KUBE-NODEPORTS'
+alias syscfgmp='kubectl get configmap -n kube-system kube-proxy -o yaml'
+alias endpts='kubectl get endpoints kubernetes -o wide'
+
+# calicoctl alias and functions section
+
+alias bgpcfg='calicoctl get bgpconfig default -o yaml'
+
+kubepoff () { 
+  calicoctl patch felixconfiguration default --patch='{"spec": {"bpfKubeProxyIptablesCleanupEnabled": false}}'
+}
+kubepon () [
+  calicoctl patch felixconfiguration default --patch='{"spec": {"bpfKubeProxyIptablesCleanupEnabled": true}}'
+}
+ebpfon () {
+  calicoctl patch felixconfiguration default --patch='{"spec": {"bpfEnabled": true}}'
+}
+ebpfoff () {
+  calicoctl patch felixconfiguration default --patch='{"spec": {"bpfEnabled": false}}'
+}
+dsron () {
+  calicoctl patch felixconfiguration default --patch='{"spec": {"bpfExternalServiceMode": "DSR"}}'
+}
+dsroff () {
+  calicoctl patch felixconfiguration default --patch='{"spec": {"bpfExternalServiceMode": "Tunnel"}}'
+}
+cwireon () {
+  calicoctl patch felixconfiguration default --type='merge' -p '{"spec":{"wireguardEnabled":true}}'
+}
+cwireoff () {
+  calicoctl patch felixconfiguration default --type='merge' -p '{"spec":{"wireguardEnabled":false}}'
+}
+
+
 # Toolbox .bashrc
 
 alias alln='ss -tulpan | grep LISTEN'
@@ -100,10 +157,6 @@ alias grsas='openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -d
 alias rand64='openssl rand -base64 32' # redirect to a file
 
 alias ldapcert='openssl s_client -connect localhost:389 -starttls ldap -showcerts'
-
-alias k8='microk8s.kubectl'
-alias k3='kubectl'
-alias k='kubectl'
 
 # ECC manual operations with openssl
 
