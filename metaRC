@@ -53,7 +53,7 @@ alias bgpcfg='calicoctl get bgpconfig default -o yaml'
 kubepoff () { 
   calicoctl patch felixconfiguration default --patch='{"spec": {"bpfKubeProxyIptablesCleanupEnabled": false}}'
 }
-kubepon () [
+kubepon () {
   calicoctl patch felixconfiguration default --patch='{"spec": {"bpfKubeProxyIptablesCleanupEnabled": true}}'
 }
 ebpfon () {
