@@ -36,7 +36,7 @@ iptableson () {
 alias m8='microk8s.kubectl'
 alias k3='kubectl'
 alias k='kubectl'
-alias podbash='kubectl exec -it -n yaobank $TARGET_POD /bin/bash'
+alias podbash='kubectl exec -it $TARGET_POD /bin/bash'
 alias descpod='kubectl describe $TARGET_POD'
 alias descall='kubectl describe all -A'
 alias natable='iptables -v --numeric --table nat --list'
