@@ -55,7 +55,7 @@ alias endpts='kubectl get endpoints kubernetes -o wide'
 
 alias bgpcfg='calicoctl get bgpconfig default -o yaml'
 
-kubepoff () { 
+kubepoff () {
   calicoctl patch felixconfiguration default --patch='{"spec": {"bpfKubeProxyIptablesCleanupEnabled": false}}'
 }
 kubepon () {
@@ -107,8 +107,8 @@ alias scripter='cd /usr/local/scripts'
 alias cfger='cd /usr/local/cfgs'
 alias brutezip='sudo gzip $1/*log'
 alias bkoff='bigreport && cp ~/*out /var/log ; tar czvf backup-$(hostname)-$(date +'%Y%m%d%H%M%S'.tgz /var/log && scp backup*.tgz $(cat /tmp/user)@$(cat /tmp/backup):/tmp/ && shutdown -r now'
-alias ff='firefox 2>> firefox.$(date +%m%d%y-%H_%S).log'
-alias chrm='chromium 2>> chromium.$(date +%m%d%y-%H_%S).log'
+alias ff='firefox 2>> firefox.$(date +%Y%m%d-%H_%S).log'
+alias chrm='chromium 2>> chromium.$(date +%Y%m%d-%H_%S).log'
 alias shredhard='shred -v -n 25 -u -z'
 alias gensshkey='ssh-keygen -t ed25519'
 
@@ -128,15 +128,15 @@ alias rsa4096='openssl genrsa 4096'
 alias rsa2048='openssl genrsa 2048'
 
 # Two different rsa signing methods, the first prints Verified OK, the second prints the contents.
-# Note that the dgst signing can use EC keys as well. 
+# Note that the dgst signing can use EC keys as well.
 rsasign () {
-  openssl dgst -sign $3 -keyform PEM -sha256 -out $2 -binary $1 
+  openssl dgst -sign $3 -keyform PEM -sha256 -out $2 -binary $1
 }
 rsasign2 () {
   openssl rsautl -sign -in $1 -inkey $3 -out $2
 }
 rsaverify () {
-  openssl dgst -verify $2 -keyform PEM -sha256 -signature $1 -binary $3 
+  openssl dgst -verify $2 -keyform PEM -sha256 -signature $1 -binary $3
 }
 rsaverify2 () {
   openssl rsautl -verify -in $1 -inkey $2 -pubin
@@ -207,7 +207,7 @@ expsecppub () {
 
 # RSA manual operations with openssl
 
-# osenc-setup 
+# osenc-setup
 osenc-setup () {
   openssl genrsa 4096 > secret-rsa.pem
   openssl rsa -in secret-rsa.pem -pubout -outform pem > rsa.pub
@@ -220,7 +220,7 @@ osenc-enc-pass () {
 }
 
 oldosenc-decrypt () {
-  openssl rsautl -decrypt -inkey secret-rsa.pem -in key.bin.enc -out key.bin 
+  openssl rsautl -decrypt -inkey secret-rsa.pem -in key.bin.enc -out key.bin
   openssl enc -d -aes256 -base64 -in $1 -out $2 -pass file:./key.bin  #old way, use the ecenc and ecdec instead when you can, -pbkdf2
 }
 
@@ -246,7 +246,7 @@ osenc-decrypt () {
 # Person A runs the functions contents like:
 # $ osenc-setup
 # $ cp rsa.pub Person-A.rsa.pub
-# Then Person A sends Person-A.rsa.pub to Person B. 
+# Then Person A sends Person-A.rsa.pub to Person B.
 
 # Person B runs the functions contents like:
 # $ cp Person-A.rsa.pub rsa.pub
@@ -257,15 +257,15 @@ osenc-decrypt () {
 
 # Then person A can decrypt Person B's key.bin.enc, and then decrypt Person-B-secret-for-Person-A.txt.asc
 # like so:
-# $ cp Person-B-key.bin.enc key.bin.enc 
+# $ cp Person-B-key.bin.enc key.bin.enc
 # $ osenc-decrypt
 
-######################################## ->  
+######################################## ->
 #                                            ->          ->
 #                                     -->     ->
 #        collection             ->   ->    ->
 #                                   ->                ->
-#                                      --->  -> 
+#                                      --->  ->
 ########################################          ->
 
 fpenc () {
@@ -277,7 +277,7 @@ pasg () {
 }
 
 bck () {
-  cp $1 $1.$(date +'%m%d%y').bak && cp /dev/null $1 && gzip -9 $1.$(date +'%m%d%y').bak &
+  cp $1 $1.$(date +'%Y%m%d').bak && cp /dev/null $1 && gzip -9 $1.$(date +'%Y%m%d').bak &
 }
 
 backupmbr () {
@@ -303,8 +303,8 @@ ufw-all-ssh-ban () {
   ufw reload
 }
 
-ext-ip () { 
-  lynx --dump $1; 
+ext-ip () {
+  lynx --dump $1;
 }
 
 netest () {
@@ -327,13 +327,13 @@ ssss-gen () {
 
 # generate strings for parts of secrets
 # the seds in here are just a compat/complexity layer... you can take them out or switch them up if you prefer etc
-azkar () { 
-  for i in 1 2 3 4 5 6 7 8 9 10 11 12 13; do 
-    echo "unit $i $(cat /dev/urandom | xxd -p | fold -12 | head -n1)"; 
-  done; 
+azkar () {
+  for i in 1 2 3 4 5 6 7 8 9 10 11 12 13; do
+    echo "unit $i $(cat /dev/urandom | xxd -p | fold -12 | head -n1)";
+  done;
   for g in 1 2 3; do
     echo "mod $g $(cat /dev/urandom | xxd -p | fold -4 | sed 's/1/%/g' | sed 's/2/+/g' | sed 's/3/./g' | sed 's/4/$/g' | sed 's/5/B/g' | sed 's/6/@/g' | sed 's/7/@/g' | sed 's/8/Q/g' | head -n1)";
-  done 
+  done
   for s in 1 2 3;
     do echo "header-base $s $(cat /dev/urandom | base64 | fold -12 | sed 's/1/%/g' | sed 's/2/+/g' | sed 's/3/./g' | sed 's/4/$/g' | sed 's/5/B/g' | sed 's/6/@/g' | sed 's/7/@/g' | sed 's/8/Q/g' | head -n1)";
   done
@@ -365,18 +365,18 @@ redisfgz () {
   echo "keys *" | redis-cli | cut -d' ' -f2 | while read line; do
     lineval="$(echo "get $line" | redis-cli | cut -d' ' -f2)"
     echo -e "$(date +%Y%m%d%H%M%S) \e[1;32mloading redis to flatfile...\e[0m";
-    echo "|$line|$lineval|" >> redis_"$stamp"_.flat 
+    echo "|$line|$lineval|" >> redis_"$stamp"_.flat
   done
   gzip -9 redis_"$stamp"_.flat
 }
 
 # Load up redis from flat file.
 flatload () {
-  cat $1 | while read line; do 
+  cat $1 | while read line; do
     echo "loading $line into \e[0;32redis\e[0m"
     key="$(echo $line | cut -d'|' -f2)"
     value="$(echo $line | cut -d'|' -f3)"
-    echo "set $key $value" | redis-cli 
+    echo "set $key $value" | redis-cli
   done
 }
 
@@ -419,12 +419,12 @@ dsort () {
   done
 }
 
-lsnp() { 
-  ls -l $1 | awk '{k=0;for(i=0;i<=8;i++)k+=((substr($1,i+2,1)~/[rwx]/) *2^(8-i));if(k)printf("%0o ",k);print}'; 
+lsnp() {
+  ls -l $1 | awk '{k=0;for(i=0;i<=8;i++)k+=((substr($1,i+2,1)~/[rwx]/) *2^(8-i));if(k)printf("%0o ",k);print}';
 }
 
 statl () {
-  stat -c '%a %n' 
+  stat -c '%a %n'
 }
 
 remindperms () {
@@ -437,17 +437,17 @@ remindperms () {
   echo "6    (Read, write, no execute)    rw-"
   echo "7    (Read, write, execute)   rwx"
   echo "(who)    u        User"
-  echo "(who)    g	    Group owner"
-  echo "(who)    o	    Other"
-  echo "(who)    a	    All (“world”)"
+  echo "(who)    g          Group owner"
+  echo "(who)    o          Other"
+  echo "(who)    a          All (“world”)"
   echo "(action)     +        Adding permissions"
-  echo "(action)     -	    Removing permissions"
-  echo "(action)     =	    Explicitly set permissions"
-  echo "(permissions)    r	    Read"
-  echo "(permissions)    w	    Write"
-  echo "(permissions)    x	    Execute"
-  echo "(permissions)    t	    Sticky bit"
-  echo "(permissions)    s	    Set UID or GID"
+  echo "(action)     -      Removing permissions"
+  echo "(action)     =      Explicitly set permissions"
+  echo "(permissions)    r          Read"
+  echo "(permissions)    w          Write"
+  echo "(permissions)    x          Execute"
+  echo "(permissions)    t          Sticky bit"
+  echo "(permissions)    s          Set UID or GID"
 }
 
 colorz () {
@@ -548,25 +548,25 @@ scrubletters () {
 alias sblts="scrubletters"
 
 bigreport () {
-  touch ~/df.$(hostname).$(date +'%m%d%y:%H:%M%S').out
-  touch ~/lsof.$(hostname).$(date +'%m%d%y:%H:%M%S').out
-  touch  ~/netstat.$(hostname).$(date +'%m%d%y:%H:%M%S').out
-  touch ~/netstat.$(hostname).$(date +'%m%d%y:%H:%M%S').out
-  touch  ~/facter.$(hostname).$(date +'%m%d%y:%H:%M%S').out
-  touch  ~/users.$(hostname).$(date +'%m%d%y:%H:%M%S').out
-  touch  ~/last.$(hostname).$(date +'%m%d%y:%H:%M%S').out
+  touch ~/df.$(hostname).$(date +'%Y%m%d%H%M%S').out
+  touch ~/lsof.$(hostname).$(date +'%Y%m%d%H%M%S').out
+  touch  ~/netstat.$(hostname).$(date +'%Y%m%d%H%M%S').out
+  touch ~/netstat.$(hostname).$(date +'%Y%m%d%H%M%S').out
+  touch  ~/facter.$(hostname).$(date +'%Y%m%d%H%M%S').out
+  touch  ~/users.$(hostname).$(date +'%Y%m%d%H%M%S').out
+  touch  ~/last.$(hostname).$(date +'%Y%m%d%H%M%S').out
 
-  df -h > ~/df.$(hostname).$(date +'%m%d%y:%H:%M%S').out
-  lsof > ~/lsof.$(hostname).$(date +'%m%d%y:%H:%M%S').out
-  netstat -a > ~/netstat.$(hostname).$(date +'%m%d%y:%H:%M%S').out || ss -tanu > ~/ss.$(hostname).$(date +'%m%d%y:%H:%M%S').out
-  free -m > ~/free.$(hostname).$(date +'%m%d%y:%H:%M%S').out
-  facter > ~/facter.$(hostname).$(date +'%m%d%y:%H:%M%S').out || uname -a > ~/uname.$(hostname).$(date +'%m%d%y:%H:%M%S').out
-  w > ~/users.$(hostname).$(date +'%m%d%y:%H:%M%S').out
-  last > ~/last.$(hostname).$(date +'%m%d%y:%H:%M%S').out
+  df -h > ~/df.$(hostname).$(date +'%Y%m%d%H%M%S').out
+  lsof > ~/lsof.$(hostname).$(date +'%Y%m%d%H%M%S').out
+  netstat -a > ~/netstat.$(hostname).$(date +'%Y%m%d%H%M%S').out || ss -tanu > ~/ss.$(hostname).$(date +'%Y%m%d%H%M%S').out
+  free -m > ~/free.$(hostname).$(date +'%Y%m%d%H%M%S').out
+  facter > ~/facter.$(hostname).$(date +'%Y%m%d%H%M%S').out || uname -a > ~/uname.$(hostname).$(date +'%Y%m%d%H%M%S').out
+  w > ~/users.$(hostname).$(date +'%Y%m%d%H%M%S').out
+  last > ~/last.$(hostname).$(date +'%Y%m%d%H%M%S').out
 }
 
 harvest () {
-  for x in $@ ; do tar czvf harvest.$(date +'%m%d%y').$(hostname).$(echo "$@" | tr -d '\040\011\012\015').tgz "$x"; done
+  for x in $@ ; do tar czvf harvest.$(date +'%Y%m%d').$(hostname).$(echo "$@" | tr -d '\040\011\012\015').tgz "$x"; done
 }
 
 #######################################################---------------------> Enjoy.
@@ -623,7 +623,7 @@ bash ~/Scripts/xor.sh
 # Repeat n times command.
 repeat () {
   local i max
-  max=$1; 
+  max=$1;
   shift;
   for ((i=1; i <= max ; i++)); do
     eval "$@";
@@ -632,9 +632,9 @@ repeat () {
 
 # One-time-pad batch XOR.
 otpbatch () {
-for datasets in $(ls ~/seeds/*); do 
-  cat $datasets | stripper > ~/seeds/b.xor; 
-  exor > "$datasets".output; 
+for datasets in $(ls ~/seeds/*); do
+  cat $datasets | stripper > ~/seeds/b.xor;
+  exor > "$datasets".output;
 done 2> /dev/null &
 }
 
@@ -645,23 +645,23 @@ for datasets in $(ls ~/seeds/*.xor); do
   echo "now b.xor is $(cat ~/seeds/b.xor)";
   echo "XOR $datasets against a.xor - $(cat ~/seeds/a.xor)"
   echo $(exor) > "$datasets".output;
-done 
+done
 }
 
 # Run a validation check on the seed files.
 libvalidate () {
 for data in $(ls ~/seeds/*); do
-  echo "$data"; 
-  cat "$data" | wc -c; 
-  echo "$data stripped"; 
-  cat "$data" | stripper | wc -c; 
+  echo "$data";
+  cat "$data" | wc -c;
+  echo "$data stripped";
+  cat "$data" | stripper | wc -c;
 done
 }
 
 # Generate a medium sized library of binary digits for playing with.
-libgen () { 
-  for x in {1000..9999}; 
-    do int2bin "$x" > "$x".xor ; 
+libgen () {
+  for x in {1000..9999};
+    do int2bin "$x" > "$x".xor ;
   done
 }
 
@@ -676,10 +676,9 @@ sv2json() {
 }
 
 dhex() {
-  export HEXIN=$1 ; python -c "print ''.join(chr(int(''.join(i), 16)) for i in zip(*[iter('$HEXIN')]*2))"; 
+  export HEXIN=$1 ; python -c "print ''.join(chr(int(''.join(i), 16)) for i in zip(*[iter('$HEXIN')]*2))";
 }
 
 yaml2json() {
   python -c 'import yaml,pprint;pprint.pprint(yaml.load(open("convert.yml").read()))'
 }
-
