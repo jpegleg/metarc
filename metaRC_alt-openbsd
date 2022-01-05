@@ -204,22 +204,23 @@ scrubletters () {
 alias sblts="scrubletters"
 
 bigreport () {
-  touch ~/df.$(hostname).$(date +'%Y%m%d:%H:%M:%S').out
-  touch ~/lsof.$(hostname).$(date +'%Y%m%d:%H:%M:%S').out
-  touch  ~/netstat.$(hostname).$(date +'%Y%m%d:%H:%M:%S').out
-  touch ~/netstat.$(hostname).$(date +'%Y%m%d:%H:%M:%S').out
-  touch  ~/facter.$(hostname).$(date +'%Y%m%d:%H:%M:%S').out
-  touch  ~/users.$(hostname).$(date +'%Y%m%d:%H:%M:%S').out
-  touch  ~/last.$(hostname).$(date +'%Y%m%d:%H:%M:%S').out
+  touch ~/df.$(hostname).$(date +'%Y%m%d%H%M%S').out
+  touch ~/lsof.$(hostname).$(date +'%Y%m%d%H%M%S').out
+  touch  ~/netstat.$(hostname).$(date +'%Y%m%d%H%M%S').out
+  touch ~/netstat.$(hostname).$(date +'%Y%m%d%H%M%S').out
+  touch  ~/facter.$(hostname).$(date +'%Y%m%d%H%M%S').out
+  touch  ~/users.$(hostname).$(date +'%Y%m%d%H%M%S').out
+  touch  ~/last.$(hostname).$(date +'%Y%m%d%H%M%S').out
 
-  df -h > ~/df.$(hostname).$(date +'%Y%m%d:%H:%M:%S').out
-  lsof > ~/lsof.$(hostname).$(date +'%Y%m%d:%H:%M:%S').out
-  netstat -a > ~/netstat.$(hostname).$(date +'%Y%m%d:%H:%M:%S').out || ss -tanu > ~/ss.$(hostname).$(date +'%Y%m%d:%H:%M:%S').out
-  free -m > ~/free.$(hostname).$(date +'%Y%m%d:%H:%M:%S').out
-  facter > ~/facter.$(hostname).$(date +'%Y%m%d:%H:%M:%S').out || uname -a > ~/uname.$(hostname).$(date +'%Y%m%d:%H:%M:%S').out
-  w > ~/users.$(hostname).$(date +'%Y%m%d:%H:%M:%S').out
-  last > ~/last.$(hostname).$(date +'%Y%m%d:%H:%M:%S').out
+  df -h > ~/df.$(hostname).$(date +'%Y%m%d%H%M%S').out
+  lsof > ~/lsof.$(hostname).$(date +'%Y%m%d%H%M%S').out
+  netstat -a > ~/netstat.$(hostname).$(date +'%Y%m%d%H%M%S').out || ss -tanu > ~/ss.$(hostname).$(date +'%Y%m%d%H%M%S').out
+  free -m > ~/free.$(hostname).$(date +'%Y%m%d%H%M%S').out
+  facter > ~/facter.$(hostname).$(date +'%Y%m%d%H%M%S').out || uname -a > ~/uname.$(hostname).$(date +'%Y%m%d%H%M%S').out
+  w > ~/users.$(hostname).$(date +'%Y%m%d%H%M%S').out
+  last > ~/last.$(hostname).$(date +'%Y%m%d%H%M%S').out
 }
+
 
 harvest () {
   for x in $@ ; do tar czvf harvest.$(date +'%Y%m%d').$(hostname).$(echo "$@" | tr -d '\040\011\012\015').tgz "$x"; done
