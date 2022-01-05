@@ -271,7 +271,7 @@ rmblankw () {
 }
 
 scrub () {
-  sed 's/[:graph:]/∎//g'
+  sed 's/./∎//g'
 }
 
 scrubnumbers () {
