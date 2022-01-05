@@ -20,6 +20,9 @@ SVN_EDITOR=vim
 
 # k8s alias and functions section
 
+mastertaint () {
+  kubectl taint nodes --all node-role.kubernetes.io/master-
+}
 setpod () {
   export TARGET_POD=$(kubectl get pods -n $1 -l app=$2 -o name)
 }
@@ -32,7 +35,9 @@ kubeproxyon () {
 iptableson () {
   kubectl patch installation.operator.tigera.io default --type merge -p '{"spec":{"calicoNetwork":{"linuxDataplane":"Iptables"}}}'
 }
-
+kdeletion () {
+  for x in $(kubectl get all | awk '{print $1}' | grep -v NAME | grep -v pod); do kubectl delete $x; done
+}
 alias m8='microk8s.kubectl'
 alias k3='kubectl'
 alias k='kubectl'
@@ -101,7 +106,7 @@ alias loghunt='find . -name "*.log" -exec ls -larth {} ];'
 alias scripter='cd /usr/local/scripts'
 alias cfger='cd /usr/local/cfgs'
 alias brutezip='sudo gzip $1/*log'
-alias bkoff='bigreport && cp ~/*out /var/log ; tar czvf backup-$(hostname)-$(date +'%m%d%y%H%M%S'.tgz /var/log && scp backup*.tgz $(cat /tmp/user)@$(cat /tmp/backup):/tmp/ && shutdown -r now'
+alias bkoff='bigreport && cp ~/*out /var/log ; tar czvf backup-$(hostname)-$(date +'%Y%m%d%H%M%S'.tgz /var/log && scp backup*.tgz $(cat /tmp/user)@$(cat /tmp/backup):/tmp/ && shutdown -r now'
 alias ff='firefox 2>> firefox.$(date +%m%d%y-%H_%S).log'
 alias chrm='chromium 2>> chromium.$(date +%m%d%y-%H_%S).log'
 alias shredhard='shred -v -n 25 -u -z'
@@ -267,10 +272,6 @@ fpenc () {
    gpg --symmetric  --cipher=aes256 --always-trust --batch --armor --passphrase $1 --yes
 }
 
-singlek8s () {
-  kubectl taint nodes --all node-role.kubernetes.io/master-
-}
-
 pasg () {
   ps aux | grep "$1"
 }
@@ -300,10 +301,6 @@ ufw-all-ssh-ban () {
     ufw insert 1 deny from $x to any port 22;
   done
   ufw reload
-}
-
-killk () {
-  for x in $(k get all | awk '{print $1}' | grep -v NAME | grep -v pod); do k delete $x; done
 }
 
 ext-ip () { 
@@ -411,7 +408,7 @@ tst () {
 }
 
 dsort () {
-  for y in 2020 2019 2018 2017 2016 2015 2014 2013 2012 2011 2010; do
+  for y in 2022 2021 2020 2019 2018 2017 2016 2015 2014 2013 2012; do
     echo "Year $y";
     for x in Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec; do
       echo "Setting Month to $x";
