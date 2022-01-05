@@ -1,9 +1,7 @@
-
 alias lsl='ls -larth --color=auto'
 alias ls='ls --color=auto'
 alias pss='ps awwwTfux'
 alias l='ls -larth'
-
 alias reviewset='set | less'
 alias speedtest='openssl speed'
 alias genmac="openssl rand -hex 6 | sed 's/\(..\)/\1:/g; s/.$//'"
@@ -86,7 +84,7 @@ pasg () {
 }
 
 bck () {
-  cp $1 $1.$(date +"%m%d%y").bak && cp /dev/null $1 && gzip $1.$(date +"%m%d%y").bak
+  cp $1 $1.$(date +"%Y%m%d").bak && cp /dev/null $1 && gzip $1.$(date +"%Y%m%d").bak
 }
 
 delredis () {
@@ -112,17 +110,17 @@ redisfgz () {
   echo "keys *" | redis-cli | cut -d' ' -f2 | while read line; do
     lineval="$(echo "get $line" | redis-cli | cut -d' ' -f2)"
     echo -e "$(date +%Y%m%d%H%M%S) \e[1;32mloading redis to flatfile...\e[0m";
-    echo "|$line|$lineval|" >> redis_"$stamp"_.flat 
+    echo "|$line|$lineval|" >> redis_"$stamp"_.flat
   done
   gzip -9 redis_"$stamp"_.flat
 }
 
 flatload () {
-  cat $1 | while read line; do 
+  cat $1 | while read line; do
     echo "loading $line into \e[0;32redis\e[0m"
     key="$(echo $line | cut -d'|' -f2)"
     value="$(echo $line | cut -d'|' -f3)"
-    echo "set $key $value" | redis-cli 
+    echo "set $key $value" | redis-cli
   done
 }
 
