@@ -188,7 +188,7 @@ rmblankw () {
 }
 
 scrub () {
-  sed 's/./∎//g'
+  sed 's/./∎/g'
 }
 
 scrubnumbers () {
