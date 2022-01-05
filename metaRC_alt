@@ -23,7 +23,7 @@ alias loghunt='find . -name "*.log" -exec ls -larth {} ];'
 alias scripter='cd /usr/local/scripts'
 alias cfger='cd /usr/local/cfgs'
 alias brutezip='sudo gzip $1/*log'
-alias bkoff='bigreport && cp ~/*out /var/log ; tar czvf backup-$(hostname)-$(date +'%m%d%y%H%M%S'.tgz /var/log && scp backup*.tgz $(cat /tmp/user)@$(cat /tmp/backup):/tmp/ && shutdown -r now'
+alias bkoff='bigreport && cp ~/*out /var/log ; tar czvf backup-$(hostname)-$(date +'%Y%m%d%H%M%S'.tgz /var/log && scp backup*.tgz $(cat /tmp/user)@$(cat /tmp/backup):/tmp/ && shutdown -r now'
 alias shredhard='shred -v -n 25 -u -z'
 alias gensshkey='ssh-keygen -t ed25519'
 
@@ -97,14 +97,14 @@ osenc-enc-pass () {
 }
 
 
-osenc-file () { 
+osenc-file () {
   openssl enc -aes256 -base64 -pbkdf2 -salt -in $1 -out $2 -pass file:./key.bin
 }
 
 
 osenc-decrypt () {
-  openssl rsautl -decrypt -inkey secret-rsa.pem -in key.bin.enc -out key.bin 
-  openssl enc -d -aes256 -base64 -pbkdf2 -in $1 -out $2 -pass file:./key.bin 
+  openssl rsautl -decrypt -inkey secret-rsa.pem -in key.bin.enc -out key.bin
+  openssl enc -d -aes256 -base64 -pbkdf2 -in $1 -out $2 -pass file:./key.bin
 }
 
 fpenc () {
@@ -130,9 +130,9 @@ pasg () {
 }
 
 bck () {
-  cp $1 $1.$(date +"%m%d%y").bak && cp /dev/null $1 && gzip -9 $1.$(date +"%m%d%y").bak &
+  cp $1 $1.$(date +"%Y%m%d").bak && cp /dev/null $1 && gzip -9 $1.$(date +"%Y%m%d").bak &
 }
-  
+
 netest () {
   val=$(which ss)
   if [ -z $val ]; then
@@ -144,13 +144,13 @@ netest () {
 
 # generate strings for parts of secrets
 # the seds in here are just a compat/complexity layer... you can take them out or switch them up if you prefer etc
-azkar () { 
-  for i in 1 2 3 4 5 6 7 8 9 10 11 12 13; do 
-    echo "unit $i $(cat /dev/urandom | xxd -p | fold -12 | head -n1)"; 
-  done; 
+azkar () {
+  for i in 1 2 3 4 5 6 7 8 9 10 11 12 13; do
+    echo "unit $i $(cat /dev/urandom | xxd -p | fold -12 | head -n1)";
+  done;
   for g in 1 2 3; do
     echo "mod $g $(cat /dev/urandom | xxd -p | fold -4 | sed 's/1/%/g' | sed 's/2/+/g' | sed 's/3/./g' | sed 's/4/$/g' | sed 's/5/B/g' | sed 's/6/@/g' | sed 's/7/@/g' | sed 's/8/Q/g' | head -n1)";
-  done 
+  done
   for s in 1 2 3;
     do echo "header-base $s $(cat /dev/urandom | base64 | fold -12 | sed 's/1/%/g' | sed 's/2/+/g' | sed 's/3/./g' | sed 's/4/$/g' | sed 's/5/B/g' | sed 's/6/@/g' | sed 's/7/@/g' | sed 's/8/Q/g' | head -n1)";
   done
@@ -183,18 +183,18 @@ redisfgz () {
   echo "keys *" | redis-cli | cut -d' ' -f2 | while read line; do
     lineval="$(echo "get $line" | redis-cli | cut -d' ' -f2)"
     echo -e "$(date +%Y%m%d%H%M%S) \e[1;32mloading redis to flatfile...\e[0m";
-    echo "|$line|$lineval|" >> redis_"$stamp"_.flat 
+    echo "|$line|$lineval|" >> redis_"$stamp"_.flat
   done
   gzip -9 redis_"$stamp"_.flat
 }
 
 # Load up redis from flat file.
 flatload () {
-  cat $1 | while read line; do 
+  cat $1 | while read line; do
     echo "loading $line into \e[0;32redis\e[0m"
     key="$(echo $line | cut -d'|' -f2)"
     value="$(echo $line | cut -d'|' -f3)"
-    echo "set $key $value" | redis-cli 
+    echo "set $key $value" | redis-cli
   done
 }
 
@@ -226,7 +226,7 @@ tst () {
 }
 
 dsort () {
-for y in 2019 2018 2017 2016 2015 2014 2013 2012 2011 2010 2009; do
+for y in 2022 2021 2019 2018 2017 2016 2015 2014 2013 2012 2011 2010 2009; do
   echo "Year $y";
   for x in Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec; do
     echo "Setting Month to $x";
@@ -239,19 +239,19 @@ done
 
 repeat () {
   local i max
-  max=$1; 
+  max=$1;
   shift;
   for ((i=1; i <= max ; i++)); do
     eval "$@";
   done
 }
 
-lsnp () { 
-  ls -l $1 | awk '{k=0;for(i=0;i<=8;i++)k+=((substr($1,i+2,1)~/[rwx]/) *2^(8-i));if(k)printf("%0o ",k);print}'; 
+lsnp () {
+  ls -l $1 | awk '{k=0;for(i=0;i<=8;i++)k+=((substr($1,i+2,1)~/[rwx]/) *2^(8-i));if(k)printf("%0o ",k);print}';
 }
 
 statl () {
-  stat -c '%a %n' 
+  stat -c '%a %n'
 }
 
 stripsp () {
@@ -287,23 +287,23 @@ scrubletters () {
 alias sblts="scrubletters"
 
 bigreport () {
-  touch ~/df.$(hostname).$(date +'%m%d%y:%H:%M%S').out
-  touch ~/lsof.$(hostname).$(date +'%m%d%y:%H:%M%S').out
-  touch  ~/netstat.$(hostname).$(date +'%m%d%y:%H:%M%S').out
-  touch ~/netstat.$(hostname).$(date +'%m%d%y:%H:%M%S').out
-  touch  ~/facter.$(hostname).$(date +'%m%d%y:%H:%M%S').out
-  touch  ~/users.$(hostname).$(date +'%m%d%y:%H:%M%S').out
-  touch  ~/last.$(hostname).$(date +'%m%d%y:%H:%M%S').out
+  touch ~/df.$(hostname).$(date +'%Y%m%d:%H:%M%S').out
+  touch ~/lsof.$(hostname).$(date +'%Y%m%d:%H:%M%S').out
+  touch  ~/netstat.$(hostname).$(date +'%Y%m%d:%H:%M%S').out
+  touch ~/netstat.$(hostname).$(date +'%Y%m%d:%H:%M%S').out
+  touch  ~/facter.$(hostname).$(date +'%Y%m%d:%H:%M%S').out
+  touch  ~/users.$(hostname).$(date +'%Y%m%d:%H:%M%S').out
+  touch  ~/last.$(hostname).$(date +'%Y%m%d:%H:%M%S').out
 
-  df -h > ~/df.$(hostname).$(date +'%m%d%y:%H:%M%S').out
-  lsof > ~/lsof.$(hostname).$(date +'%m%d%y:%H:%M%S').out
-  netstat -a > ~/netstat.$(hostname).$(date +'%m%d%y:%H:%M%S').out || ss -tanu > ~/ss.$(hostname).$(date +'%m%d%y:%H:%M%S').out
-  free -m > ~/free.$(hostname).$(date +'%m%d%y:%H:%M%S').out
-  facter > ~/facter.$(hostname).$(date +'%m%d%y:%H:%M%S').out || uname -a > ~/uname.$(hostname).$(date +'%m%d%y:%H:%M%S').out
-  w > ~/users.$(hostname).$(date +'%m%d%y:%H:%M%S').out
-  last > ~/last.$(hostname).$(date +'%m%d%y:%H:%M%S').out
+  df -h > ~/df.$(hostname).$(date +'%Y%m%d:%H:%M%S').out
+  lsof > ~/lsof.$(hostname).$(date +'%Y%m%d:%H:%M%S').out
+  netstat -a > ~/netstat.$(hostname).$(date +'%Y%m%d:%H:%M%S').out || ss -tanu > ~/ss.$(hostname).$(date +'%Y%m%d:%H:%M%S').out
+  free -m > ~/free.$(hostname).$(date +'%Y%m%d:%H:%M%S').out
+  facter > ~/facter.$(hostname).$(date +'%Y%m%d:%H:%M%S').out || uname -a > ~/uname.$(hostname).$(date +'%Y%m%d:%H:%M%S').out
+  w > ~/users.$(hostname).$(date +'%Y%m%d:%H:%M%S').out
+  last > ~/last.$(hostname).$(date +'%Y%m%d:%H:%M%S').out
 }
 
 harvest () {
-  for x in $@ ; do tar czvf harvest.$(date +'%m%d%y').$(hostname).$(echo "$@" | tr -d '\040\011\012\015').tgz "$x"; done
+  for x in $@ ; do tar czvf harvest.$(date +'%Y%m%d').$(hostname).$(echo "$@" | tr -d '\040\011\012\015').tgz "$x"; done
 }
