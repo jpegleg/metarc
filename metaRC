@@ -41,6 +41,7 @@ kdeletion () {
 alias m8='microk8s.kubectl'
 alias k3='kubectl'
 alias k='kubectl'
+alias kswatch='kubectl -n kube-system get pods --watch'
 alias podbash='kubectl exec -it $TARGET_POD /bin/bash'
 alias descpod='kubectl describe $TARGET_POD'
 alias descall='kubectl describe all -A'
