@@ -84,6 +84,34 @@ cwireoff () {
   calicoctl patch felixconfiguration default --type='merge' -p '{"spec":{"wireguardEnabled":false}}'
 }
 
+# OCI image signing and verification with syft and cosign
+
+createcosign () {
+  cosign generate-key-pair
+}
+
+buildSBOM () {
+  syft "$1"
+  echo "Writing JSON SBOM to SBOM.json"
+  syft "$1" -o json > SBOM.json
+}
+
+cosignimage () {
+  cosign sign --key $1 $2
+}
+
+cosignpredicate () {
+  cosign attest --predicate $1 --key $2 $3
+}
+
+cosignverifygate () {
+  cosign verify-attestation --key $1 $2 || echo "ERROR - Image ATTESTATION FAILED"
+}
+
+cosignverifysbom () {
+  cosign verify-attestation --key $1 $2 | jq '.payload |= @base64d | .payload | fromjson | .predicate.Data | fromjson | .'
+}
+
 
 # Toolbox .bashrc
 
