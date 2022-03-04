@@ -26,6 +26,9 @@ mastertaint () {
 setpod () {
   export TARGET_POD=$(kubectl get pods -o name | grep $1 | cut -d '/' -f2)
 }
+execinpod () {
+  kubectl exec $TARGET_POD -- "${@}"
+}
 followpod () {
   kubectl logs -n $1 -l app=$2 --follow
 }
@@ -45,7 +48,7 @@ alias kswatch='kubectl -n kube-system get pods --watch'
 alias checkbpf='mount | grep /sys/fs/bpf'
 alias mountbpf='mount bpffs /sys/fs/bpf -t bpf'
 alias hubbletail='hubble --server localhost:4245 observe --tail'
-alias podbash='kubectl exec -it $TARGET_POD /bin/bash'
+alias podbash='kubectl exec --stdin --tty $TARGET_POD -- /bin/bash'
 alias descpod='kubectl describe $TARGET_POD'
 alias descall='kubectl describe all -A'
 alias natable='iptables -v --numeric --table nat --list'
