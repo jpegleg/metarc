@@ -26,6 +26,9 @@ mastertaint () {
 setpod () {
   export TARGET_POD=$(kubectl get pods -o name | grep $1 | cut -d '/' -f2 | head -n1)
 } 
+rotatesecrets () {
+  kubectl get secrets --all-namespaces -o json | kubectl replace -f -
+}
 execinpod () {
   kubectl exec $TARGET_POD -- "${@}"
 }
