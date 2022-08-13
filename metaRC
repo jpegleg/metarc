@@ -29,6 +29,11 @@ setpod () {
 getsecrets () {
   kubectl get secrets --all-namespaces -o json 
 }
+createjwt () {
+  kubectl create token $1 $2 # first arg is SA name and second argu is optional duration such as --duration=900h
+}
+# echo -n $newsecret | base64 | tr -d'\n' to encode the jwt again for k8s
+# kubectl edit secret $secretname to drop in a new JWT for a service account
 execinpod () {
   kubectl exec $TARGET_POD -- "${@}"
 }
