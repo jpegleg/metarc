@@ -181,6 +181,9 @@ rsasign () {
 rsasign2 () {
   openssl rsautl -sign -in $1 -inkey $3 -out $2
 }
+rsasign3 () {
+  openssl pkeyutl -sign -in $1 -inkey $3 -out $2
+}
 rsaverify () {
   openssl dgst -verify $2 -keyform PEM -sha256 -signature $1 -binary $3
 }
