@@ -329,7 +329,7 @@ tid() {
 }
 
 timestamp() {
-        # ISO YYYY-MM-DDT-HH-MM+SS
+        # ISO YYYY-MM-DDT-HH:MM+SS
         export TS=$(date +%Y-%m-%dT-%H:%M+%S)
         # log format
         export SELF=$(basename $0)
