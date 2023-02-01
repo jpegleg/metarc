@@ -333,7 +333,7 @@ timestamp() {
         export TS=$(date +%Y-%m-%dT-%H:%M+%S)
         # log format
         export SELF=$(basename $0)
-        export SELFTAG=$(echo -n $SELF | b2sum | cut -c1-24)
+        export SELFTAG=$(b2sum $SELF | cut -c1-24)
         # re export $TS via timestamp function as needed
         export INFOLOG="$TS - $SELF $SELFTAG - INFO - $TID -"
         export WARNLOG="$TS - $SELF $SELFTAG - WARN - $TID -"
