@@ -317,32 +317,47 @@ osenc-decrypt () {
 #                                      --->  ->
 ########################################          ->
 
-tid() {
-        # UUID v4 aka random hex with 0aef4458-3b82-4bab-aa17-b48a625c9598 format
-        # set on initialization only, one TID per run etc
-        f1=$(cat /dev/urandom | xxd -p | head -n2 | tail -n1 | cut -c1-8)
-        f2=$(cat /dev/urandom | xxd -p | head -n2 | tail -n1 | cut -c1-4)
-        f3=$(cat /dev/urandom | xxd -p | head -n2 | tail -n1 | cut -c1-4)
-        f4=$(cat /dev/urandom | xxd -p | head -n2 | tail -n1 | cut -c1-4)
-        f5=$(cat /dev/urandom | xxd -p | head -n2 | tail -n1 | cut -c1-12)
-        export TID=$f1-$f2-$f3-$f4-$f5
+tid () {
+  # UUID v4 aka random hex with 0aef4458-3b82-4bab-aa17-b48a625c9598 format
+  # set on initialization only, one TID per run etc
+  f1=$(cat /dev/urandom | xxd -p | head -n2 | tail -n1 | cut -c1-8)
+  f2=$(cat /dev/urandom | xxd -p | head -n2 | tail -n1 | cut -c1-4)
+  f3=$(cat /dev/urandom | xxd -p | head -n2 | tail -n1 | cut -c1-4)
+  f4=$(cat /dev/urandom | xxd -p | head -n2 | tail -n1 | cut -c1-4)
+  f5=$(cat /dev/urandom | xxd -p | head -n2 | tail -n1 | cut -c1-12)
+  export TID=$f1-$f2-$f3-$f4-$f5
 }
 
-timestamp() {
-        # ISO YYYY-MM-DDT-HH:MM+SS
-        export TS=$(date +%Y-%m-%dT-%H:%M+%S)
-        # log format
-        export SELF=$(basename $0)
-        export SELFTAG=$(b2sum $SELF | cut -c1-24)
-        # re export $TS via timestamp function as needed
-        export INFOLOG="$TS - $SELF $SELFTAG - INFO - $TID -"
-        export WARNLOG="$TS - $SELF $SELFTAG - WARN - $TID -"
-        export ERRORLOG="$TS - $SELF $SELFTAG - ERROR - $TID -"
+# This "timestamp" function is to be used by sourcing from another script:
+#   #!/usr/bin/env bash
+#   source metaRC
+#   timestamp
+#   echo "$INFOLOG some stuff started"
+#   # do stuff
+#   timestamp
+#   echo "$INFOLOG moving to next stuff"
+
+timestamp () {
+  # ISO YYYY-MM-DDT-HH:MM+SS
+  export TS=$(date +%Y-%m-%dT-%H:%M+%S)
+  # log format
+  export SELF=$(basename $0)
+  export SELFTAG=$(b2sum $SELF | cut -c1-24)
+  # re export $TS via timestamp function as needed
+  export INFOLOG="$TS - $SELF $SELFTAG - INFO - $TID -"
+  export WARNLOG="$TS - $SELF $SELFTAG - WARN - $TID -"
+  export ERRORLOG="$TS - $SELF $SELFTAG - ERROR - $TID -"
+}
+
+# This next one is for CLI usage instead of sourced
+
+timez () {
+  echo $(date +%Y-%m-%dT-%H:%M+%S)
 }
 
 
 fpenc () {
-   gpg --symmetric  --cipher=aes256 --always-trust --batch --armor --passphrase $1 --yes
+  gpg --symmetric  --cipher=aes256 --always-trust --batch --armor --passphrase $1 --yes
 }
 
 pasg () {
