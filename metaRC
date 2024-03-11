@@ -49,7 +49,7 @@ kdeletion () {
   for x in $(kubectl get all | awk '{print $1}' | grep -v NAME | grep -v pod); do kubectl delete $x; done
 }
 alias m8='microk8s.kubectl'
-alias k3='kubectl'
+alias k3='k3s kubectl'
 alias k='kubectl'
 alias attpod='kubectl attach $TARGET_POD -i'
 alias kswatch='kubectl -n kube-system get pods --watch'
