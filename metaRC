@@ -284,7 +284,6 @@ osenc-decrypt () {
 }
 
 
-
 # usage of this openssl/libressl thing with the functions above involves both sides(people and/or computer) to do it correctly
 # pgp (gpg) public key encryption is a much better solution
 # but some machines or situations can't use gpg but can use openssl
@@ -667,8 +666,9 @@ shopt -s nullglob
 export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; history -r"
 
 #CryptoCore
-# These functions are used for bitwise XOR operations
-# for ad-hoc academic cryptographic batches.
+# These functions are used for bitwise XOR operations on strings
+# for ad-hoc academic/educational cryptographic batches.
+# See https://github.com/jpegleg/dwarven-toolbox/blob/main/src/hexor.rs for bitwas XOR on bytes.
 
 # Convert common decimals to binary.
 # The int2bin function can only handle 20 character inputs at a time.
@@ -705,6 +705,7 @@ msglgth () {
 exor () {
 bash ~/Scripts/xor.sh
 }
+
 # Repeat n times command.
 repeat () {
   local i max
@@ -718,7 +719,7 @@ repeat () {
 # One-time-pad batch XOR.
 otpbatch () {
 for datasets in $(ls ~/seeds/*); do
-  cat $datasets | stripper > ~/seeds/b.xor;
+  cat $datasets | stripsp > ~/seeds/b.xor;
   exor > "$datasets".output;
 done 2> /dev/null &
 }
@@ -739,7 +740,7 @@ for data in $(ls ~/seeds/*); do
   echo "$data";
   cat "$data" | wc -c;
   echo "$data stripped";
-  cat "$data" | stripper | wc -c;
+  cat "$data" | stripsp | wc -c;
 done
 }
 
@@ -753,17 +754,22 @@ libgen () {
 ######### Python extra tools section below.
 
 byteconv() {
+  python3 -c "import pprint;pprint.pprint(list(zip(('Byte', 'KByte', 'MByte', 'GByte', 'TByte'), (1 << 10*i for i in range(5)))))" ||
   python -c "import pprint;pprint.pprint(zip(('Byte', 'KByte', 'MByte', 'GByte', 'TByte'), (1 << 10*i for i in xrange(5))))"
 }
 
 sv2json() {
+  python3 -c "import csv,json;print(json.dumps(list(csv.reader(open('csv_file.csv')))))" ||
   python -c "import csv,json;print json.dumps(list(csv.reader(open('csv_file.csv'))))"
 }
 
 dhex() {
-  export HEXIN=$1 ; python -c "print ''.join(chr(int(''.join(i), 16)) for i in zip(*[iter('$HEXIN')]*2))";
+  export HEXIN=$1;
+  python3 -c "print(''.join(chr(int(''.join(i), 16)) for i in zip(*[iter('$HEXIN')]*2)))" ||
+  python -c "print ''.join(chr(int(''.join(i), 16)) for i in zip(*[iter('$HEXIN')]*2))";
 }
 
 yaml2json() {
+  python3 -c 'import yaml,json; print(json.dumps(yaml.safe_load(open("convert.yml")), indent=2))' ||
   python -c 'import yaml,pprint;pprint.pprint(yaml.load(open("convert.yml").read()))'
 }
