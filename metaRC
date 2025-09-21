@@ -67,6 +67,7 @@ alias syscfgmp='kubectl get configmap -n kube-system kube-proxy -o yaml'
 alias allcfgmp='kubectl get configmap -A -o yaml'
 alias endpts='kubectl get endpoints kubernetes -o wide'
 alias cdumper='kubectl cluster-info dump > cluster.dump'
+alias g='giant-spellbook'
 
 # calicoctl alias and functions section
 
