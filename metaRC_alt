@@ -26,6 +26,7 @@ alias brutezip='sudo gzip $1/*log'
 alias bkoff='bigreport && cp ~/*out /var/log ; tar czvf backup-$(hostname)-$(date +'%Y%m%d%H%M%S'.tgz /var/log && scp backup*.tgz $(cat /tmp/user)@$(cat /tmp/backup):/tmp/ && shutdown -r now'
 alias shredhard='shred -v -n 25 -u -z'
 alias gensshkey='ssh-keygen -t ed25519'
+alias g='giant-spellbook'
 
 # openssl section
 
